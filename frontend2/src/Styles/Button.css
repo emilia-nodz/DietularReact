@@ -1,0 +1,25 @@
+.btn-light{
+    background-color: #ECE8E4;
+    color:#4B3629;
+    padding: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 8px;
+    border-color: #9C8F87;
+    margin-right:10px;
+}
+
+.btn-light:disabled {
+    cursor: not-allowed;
+}
+
+.btn-red {
+    background-color: #B15D63;
+    color: black;
+    padding: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 8px;
+    border-color: #4b3629;
+    margin-right: 10px;
+}
