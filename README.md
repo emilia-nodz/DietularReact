@@ -17,7 +17,7 @@ Backend development: Django 5.1.3  <br>
 ## Launch
 -To launch our frontend server, enter the folder responsible for the angular files (frontend) and start the server  <br>
 cd frontend  <br>
-ng serve  <br>
+yarn start  <br>
 -To launch our backend server  <br>
 cd backend  <br>
 python manage.py runserver  <br>
