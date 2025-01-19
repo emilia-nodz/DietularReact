@@ -17,9 +17,9 @@ function NavBar() {
                 <div className="dropdown">
                     <li ><button className="dropbtn">+</button></li>
                     <div className="dropdown-content">
-                        <NavLink to="/">New allergen</NavLink>
-                        <NavLink to="/">New item</NavLink>
-                        <NavLink to="/">New meal</NavLink>
+                        <NavLink to="/addAllergen">New allergen</NavLink>
+                        <NavLink to="/addItem">New item</NavLink>
+                        <NavLink to="/addMeal">New meal</NavLink>
                     </div>
                 </div>
                 </ul>

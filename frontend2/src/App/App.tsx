@@ -4,6 +4,9 @@ import AllergenList from '../Components/Allergens/AllergenList';
 import NavBar from "../Components/NavBar";
 import ItemList from '../Components/Items/ItemList';
 import MealList from '../Components/Meals/MealList';
+import AddAllergen from '../Components/Allergens/AddAllergen';
+import AddItem from '../Components/Items/AddItem';
+import AddMeal from '../Components/Meals/AddMeal';
 
 function App() {
   return (
@@ -14,6 +17,10 @@ function App() {
         <Route path="/allergens" element={<AllergenList />} />
         <Route path="/items" element={<ItemList />} />
         <Route path="/meals" element={<MealList />} />
+        <Route path="/addAllergen" element={<AddAllergen />} />
+        <Route path="/addItem" element={<AddItem />} />
+        <Route path="/addMeal" element={<AddMeal />} />
+
       </Routes>
     </>
   );
