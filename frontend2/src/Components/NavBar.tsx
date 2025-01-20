@@ -9,7 +9,7 @@ function NavBar() {
                 <ul>
                 <li><NavLink to="/">Dietular</NavLink></li>
                 <li>plan for a better tomorrow</li>
-                <li className="split"><NavLink to="/">Calendar</NavLink></li>
+                <li className="split"><NavLink to="/calendar">Calendar</NavLink></li>
                 <li className="split"><NavLink to="/meals">Meals</NavLink></li>
                 <li className="split"><NavLink to="/items">Items</NavLink></li>
                 <li className="split"><NavLink to="/allergens">Allergens</NavLink></li>

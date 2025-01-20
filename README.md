@@ -9,6 +9,8 @@
 Dietular is an application made by <br>
 [emilia-nodz](https://github.com/emilia-nodz) <br>
 [TamaTamaTamaTamaTama](https://github.com/TamaTamaTamaTamaTama) <br>
+[Gaspek](https://github.com/Gaspek) <br>
+
 
 ## Technologies
 Frontend development: React v.18.2.0 <br>
