@@ -21,7 +21,7 @@ const AllergenList = () => {
         fetchAllergens();
       }, []);
 
-      const HandleDelete = async (id: number) => {
+    const HandleDelete = async (id: number) => {
         try {
             await deleteAllergen(id);
 
