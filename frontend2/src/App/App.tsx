@@ -7,6 +7,7 @@ import MealList from '../Components/Meals/MealList';
 import AddAllergen from '../Components/Allergens/AddAllergen';
 import AddItem from '../Components/Items/AddItem';
 import AddMeal from '../Components/Meals/AddMeal';
+import EditAllergen from '../Components/Allergens/EditAllergen';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path="/addAllergen" element={<AddAllergen />} />
         <Route path="/addItem" element={<AddItem />} />
         <Route path="/addMeal" element={<AddMeal />} />
+        <Route path="/editAllergen/:id" element={<EditAllergen/>} />
 
       </Routes>
     </>

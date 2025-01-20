@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import "../../Styles/List.css"
 import { getAllAllergens, AllergenData} from "../../Services/AllergenService";
+import { NavLink } from 'react-router-dom';
+import { LightButton } from '../Button';
 
 const AllergenList = () => {
     const [allergens, setAllergens] = useState<AllergenData[]>([]); 
@@ -21,16 +23,17 @@ const AllergenList = () => {
 
       
     return (
-        
-            <div className="main-container">
-        
+        <div className="main-container">
             <h1>Allergen list</h1>
         
             <ul>
                 <div className="list-container">
                     {allergens.map((allergen) => (
-                        <li key = {allergen.id} className="list-item-container">
-                            <p className="name">{allergen.name}</p>
+                            <li key = {allergen.id} className="list-item-container">
+                                <p className="name">{allergen.name}</p>
+                                <NavLink to={`/editAllergen/${allergen.id}`}>
+                                    <LightButton label={'EditAllergen'} />
+                                </NavLink>
                             </li>
                     ))}
                 </div>

@@ -2,12 +2,17 @@
 import React from 'react';
 import "../Styles/Button.css"
 
-interface ButtonProps {
+interface LightButtonProps {
     label: string;
     disabled?: boolean;
 }
 
-export const LightButton = (props:ButtonProps) => {
+interface RedButtonProps {
+    label: string;
+    onClick: (e: any) => void;
+}
+
+export const LightButton = (props:LightButtonProps) => {
     return (
         <button
             className='btn-light'
@@ -21,14 +26,11 @@ export const LightButton = (props:ButtonProps) => {
     );
 };
 
-export const RedButton = (props:ButtonProps) => {
+export const RedButton = (props:RedButtonProps) => {
     return (
         <button
             className='btn-red'
-            disabled={props.disabled}
-            style={{
-                cursor: props.disabled ? 'not-allowed' : 'pointer',
-            }}
+            onClick={props.onClick}
         >
             {props.label}
         </button>
