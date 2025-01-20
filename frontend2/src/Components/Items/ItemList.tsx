@@ -1,7 +1,42 @@
-import React from "react";
+import React, { useState, useEffect } from 'react';
 import "../../Styles/List.css"
+import { getItems, ItemData} from "../../Services/ItemService";
+
+
+
+
+
+
+
+
+
 
 const ItemList = () => {
+
+
+  const [items, setItems] = useState<ItemData[]>([]); 
+
+    useEffect(() => {
+        const fetchItems = async () => {
+          try {
+            const data = await getItems();
+            if (Array.isArray(data)) {
+                setItems(data);
+            }
+          } catch (error) {
+            console.error('Error loading items:', error);
+          }
+        };
+        fetchItems();
+      }, []);
+
+
+
+
+
+
+
+
     return (
         <>
             <div className="main-container">
@@ -9,35 +44,17 @@ const ItemList = () => {
 
                 <ul>
                 <div className="list-container">
-                    <li className="list-item-container">
-                        <p className="name"></p>
-                        <p className="description"></p>
-                        {/* <button className="btn-view" (click)="showDetails(item.id)"> View </button>
-                       
-                        // <button className="btn-view" (click)="update(item.id)"> Edit </button>
-                        
-                        // <button className="btn-view2" (click)="showConfirmation(item.id)"> Delete </button>
-                        
-                        // <div className="form-container">
-                        //     <div className="form-thing">
-                        //     <h3>Are you sure you want to delete ?</h3>
-                        //     </div>
-                        //     <div className="form-buttons">
-                        //     <button className="btn-view2" (click)="deleteThing(item.id)">Yes</button>
-                        //     <button className="btn-view" (click)="undo()">No</button>
-                        //     </div>
-                        // </div>
-                        
-                    
-                    
-                     */}
-                    </li>
-                </div>
-                </ul>
-            </div>
-        </>
-    );
 
-}
+                    {items.map((item) => (
+                        <li key = {item.id} className="list-item-container">
+                            <p className="name">{item.name}</p>
+                            </li>
+                    ))}
+                
 
+                 </div>
+                 </ul>
+                 </div>
+                 </>
+    )};
 export default ItemList;

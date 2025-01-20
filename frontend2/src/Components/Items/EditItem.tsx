@@ -7,6 +7,10 @@ const EditItem = () => {
             <div className="main-container">
                 <h1>Add item</h1>
                 <div className="form-container">
+                
+
+
+
                 {/* <form [formGroup]="formModel" (ngSubmit)="submitForm()">
                     <div className="form-thing">
                     <label className="label">Name</label>
