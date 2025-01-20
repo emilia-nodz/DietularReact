@@ -9,10 +9,6 @@
     margin-right:10px;
 }
 
-.btn-light:disabled {
-    cursor: not-allowed;
-}
-
 .btn-red {
     background-color: #B15D63;
     color: black;

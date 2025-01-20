@@ -7,6 +7,7 @@ import MealList from '../Components/Meals/MealList';
 import AddAllergen from '../Components/Allergens/AddAllergen';
 import AddItem from '../Components/Items/AddItem';
 import AddMeal from '../Components/Meals/AddMeal';
+import EditAllergen from '../Components/Allergens/EditAllergen';
 import Calendar from '../Components/Calendar/Calendar';
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
         <Route path="/addMeal" element={<AddMeal />} />
         <Route path="/calendar" element={<Calendar />} />
 
+        <Route path="/editAllergen/:id" element={<EditAllergen/>} />
 
       </Routes>
     </>

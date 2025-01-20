@@ -19,7 +19,7 @@ export const getAllAllergens = async(): Promise<AllergenData[]> => {
         console.error('Error fetching allergens:', error);
         throw error;
       }
-    };
+};
 
 export const addAllergen = async (allergenData: NewAllergenData): Promise<AllergenData> => {
     try {
@@ -51,4 +51,13 @@ export const updateAllergen = async (id: number, allergenData: NewAllergenData):
     }
 };
 
+export const getAllergenById = async (id: number): Promise<AllergenData> => {
+    try {
+      const response = await AxiosInstance.get(`allergen/${id}/`);
+      return response.data;
+    } catch (error) {
+      console.error(`Error fetching allergen with id ${id}:`, error);
+      throw error;
+    }
+};
 
