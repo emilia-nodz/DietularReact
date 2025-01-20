@@ -1,16 +1,47 @@
-import React from "react";
+import React, { useState, useEffect } from 'react';
 import "../../Styles/List.css"
+import { getAllAllergens, AllergenData} from "../../Services/AllergenService";
 
 const AllergenList = () => {
+    const [allergens, setAllergens] = useState<AllergenData[]>([]); 
+
+    useEffect(() => {
+        const fetchAllergens = async () => {
+          try {
+            const data = await getAllAllergens();
+            if (Array.isArray(data)) {
+                setAllergens(data);
+            }
+          } catch (error) {
+            console.error('Error loading allergens:', error);
+          }
+        };
+        fetchAllergens();
+      }, []);
+
+      
     return (
-        <>
+        
             <div className="main-container">
+        
             <h1>Allergen list</h1>
         
             <ul>
                 <div className="list-container">
-                    <li className="list-allergen-container">
-                    <p className="name"></p>
+                    {allergens.map((allergen) => (
+                        <li key = {allergen.id} className="list-allergen-container">
+                            <p className="name">{allergen.name}</p>
+                            </li>
+                    ))}
+                </div>
+            </ul>
+        </div>
+    );
+};
+                    
+
+
+
                     {/* <button className="btn-view" (click)="update(allergen.id)"> Edit </button> */}
                     
                     {/*   <button className="btn-view2" (click)="showConfirmation(allergen.id)"> Delete </button> */}
@@ -28,14 +59,6 @@ const AllergenList = () => {
                         </div>
                     } */}
                     
-                    </li>
-                
-                </div>
-                </ul>
-            </div>
-        </>
-    );
-
-}
+ 
 
 export default AllergenList;
