@@ -3,7 +3,7 @@ import { AllergenData } from "./AllergenService";
 
 
 
-export interface NewItemData {
+export interface NewItemData { 
   allergens: number[];
   name: string;
   description: string;
@@ -12,7 +12,7 @@ export interface NewItemData {
   carbohydrates: number;
   proteins: number;
   fats: number;
-  }
+}
 
 export interface ItemData {
   id: number;
@@ -24,7 +24,7 @@ export interface ItemData {
   carbohydrates: number;
   proteins: number;
   fats: number;
-  }
+}
 
 
 

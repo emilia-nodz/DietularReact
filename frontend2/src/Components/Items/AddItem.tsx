@@ -17,31 +17,31 @@ const AddItem = () => {
   const [isFormNotValid, setIsFormNotValid] = useState(true);
   const [allergens, setAllergens] = useState<AllergenData[]>([]); 
 
-    useEffect(() => {
-        const fetchAllergens = async () => {
-          try {
-            const data = await getAllAllergens();
-            if (Array.isArray(data)) {
-                setAllergens(data);
-            }
-          } catch (error) {
-            console.error('Error loading allergens:', error);
-          }
-        };
-        fetchAllergens();
-      }, []);
-
-
-
-      const handleAllergenChange = (id: number) => {
-        if (selectedAllergens.includes(id)) {
-          console.log( "Selsected all: " + id);
-          setSelectedAllergens(selectedAllergens.filter((allergenId) => allergenId !== id));
-
-        } else {
-          setSelectedAllergens([...selectedAllergens, id]);
+  useEffect(() => {
+    const fetchAllergens = async () => {
+      try {
+        const data = await getAllAllergens();
+        if (Array.isArray(data)) {
+            setAllergens(data);
         }
-      };
+      } catch (error) {
+          console.error('Error loading allergens:', error);
+      }
+    };
+    fetchAllergens();
+  }, []);
+
+
+
+  const HandleAllergenChange = (id: number) => {
+    if (selectedAllergens.includes(id)) {
+      console.log( "Selsected all: " + id);
+      setSelectedAllergens(selectedAllergens.filter((allergenId) => allergenId !== id));
+
+    } else {
+      setSelectedAllergens([...selectedAllergens, id]);
+    }
+  };
       
 
   const HandlePost = async (e: React.FormEvent) => {
@@ -83,7 +83,7 @@ const AddItem = () => {
     setIsFormNotValid(event.target.value.trim().length === 0);
   };
 
-  const handleNumberChange = (setter: React.Dispatch<React.SetStateAction<number>>) => (event: React.ChangeEvent<HTMLInputElement>) => {
+  const HandleNumberChange = (setter: React.Dispatch<React.SetStateAction<number>>) => (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseFloat(event.target.value);
     setter(isNaN(value) ? 0 : value); 
   };
@@ -115,7 +115,7 @@ const AddItem = () => {
               <input
                 name="NewItemWeightInput"
                 value={NewItemWeight}
-              onChange={handleNumberChange(setItemWeight)}
+              onChange={HandleNumberChange(setItemWeight)}
                 type="number"
               />
             </div>
@@ -124,7 +124,7 @@ const AddItem = () => {
               <input
                 name="NewItemCaloriesInput"
                 value={NewItemCalories}
-                onChange={handleNumberChange(setItemCalories)}
+                onChange={HandleNumberChange(setItemCalories)}
                 type="number"
               />
             </div>
@@ -133,7 +133,7 @@ const AddItem = () => {
               <input
                 name="NewItemCarbohydratesInput"
                 value={NewItemCarbohydrates}
-                onChange={handleNumberChange(setItemCarbohydrates)}
+                onChange={HandleNumberChange(setItemCarbohydrates)}
                 type="number"
               />
             </div>
@@ -142,7 +142,7 @@ const AddItem = () => {
               <input
                 name="NewItemProteinsInput"
                 value={NewItemProteins}
-                onChange={handleNumberChange(setItemProteins)}
+                onChange={HandleNumberChange(setItemProteins)}
                 type="number"
               />
             </div>
@@ -151,7 +151,7 @@ const AddItem = () => {
               <input
                 name="NewItemFatsInput"
                 value={NewItemFats}
-                 onChange={handleNumberChange(setItemFats)}
+                 onChange={HandleNumberChange(setItemFats)}
                 type="number"
               />
             </div>
@@ -166,7 +166,7 @@ const AddItem = () => {
                       <input
                         type="checkbox"
                         checked={selectedAllergens.includes(allergen.id)}
-                        onChange={() => handleAllergenChange(allergen.id)}
+                        onChange={() => HandleAllergenChange(allergen.id)}
                       />
                       {allergen.name}
                     </label>
