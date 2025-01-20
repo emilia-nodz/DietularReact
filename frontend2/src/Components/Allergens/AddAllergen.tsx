@@ -7,12 +7,16 @@ const AddAllergen = () => {
     const [NewAllergenName, setAllergenName] = useState<string>('');
     const [allergens, setAllergens] = useState<AllergenData[]>([]); 
 
+    const [isFormNotValid, setIsFormNotValid] = useState(true);
+
     const HandlePost = async () => {
         if(NewAllergenName.length>0) {
             try {
+                
                 const newAllergen = await addAllergen({name: NewAllergenName})
                 setAllergens([...allergens, newAllergen]);
                 setAllergenName('');
+                setIsFormNotValid(false);
             }   catch (error) {
                 console.error('Error adding allergen:', error);
             }
@@ -23,6 +27,7 @@ const AddAllergen = () => {
  
     const HandleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setAllergenName(event.target.value);
+        setIsFormNotValid(event.target.value.trim().length === 0);
     }
    
    
@@ -31,6 +36,7 @@ const AddAllergen = () => {
             <div className="main-container">
                 <h1>Add allergen</h1>
                 <div className="form-container">
+                    <form onSubmit={HandlePost}>
                     <div className="form-thing">
                         <label>Name</label>
                         <input 
@@ -42,9 +48,10 @@ const AddAllergen = () => {
                     <div className="form-thing">
                         <LightButton
                             label="Confirm"
-                            onClick={HandlePost}
+                            disabled={isFormNotValid}
                         />
                     </div>
+                    </form>
                 </div>
             </div>
         </>
