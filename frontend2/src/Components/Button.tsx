@@ -4,14 +4,17 @@ import "../Styles/Button.css"
 
 interface ButtonProps {
     label: string;
-    onClick: () => void;
+    disabled?: boolean;
 }
 
 export const LightButton = (props:ButtonProps) => {
     return (
         <button
             className='btn-light'
-            onClick={props.onClick}
+            disabled={props.disabled}
+            style={{
+                cursor: props.disabled ? 'not-allowed' : 'pointer',
+            }}
         >
             {props.label}
         </button>
@@ -22,7 +25,10 @@ export const RedButton = (props:ButtonProps) => {
     return (
         <button
             className='btn-red'
-            onClick={props.onClick}
+            disabled={props.disabled}
+            style={{
+                cursor: props.disabled ? 'not-allowed' : 'pointer',
+            }}
         >
             {props.label}
         </button>
