@@ -1,77 +1,165 @@
-import React from "react";
-import "../../Styles/Form.css"
+import React, { useEffect, useState } from "react";
+import "../../Styles/Form.css";
+import { MealData, addMeal } from "../../Services/MealService";
+import { LightButton } from "../Button";
+import { getItems, ItemData} from "../../Services/ItemService";
 
 const AddMeal = () => {
-    return (
-        <>
-            <div className="main-container">
-                <h1>Add meal</h1>
-                <div className="form-container">
-                    {/* <form [formGroup]="formModel" (ngSubmit)="submitForm()">
-                        <div className="form-thing">
-                        <label className="label">Name</label>
-                        <input type="text" formControlName="name" placeholder="Name">
-                        @if(formModel.controls['name'].errors?.['required']) {
-                            <span className="error">Meal name is required</span>
-                        } @else if(formModel.controls['name'].errors?.['maxlength']!= null) {
-                            <span className="error">Max length name is {{formModel.controls['name'].errors?.['maxlength']['requiredLength']}}</span>
-                        }
-                        </div>
-                
-                        <div className="form-thing">
-                        <label className="label">Description</label>
-                        <input type="text" formControlName="desc" placeholder="Description">
-                        @if(formModel.controls['desc'].errors?.['required']) {
-                            <span className="error">Description is required</span>
-                        } 
-                        </div>
-                
-                        <div className="form-thing">
-                        <label className="label">Number of portions</label>
-                        <input type="number" placeholder="Number of portions" formControlName="portionNo">
-                        @if(formModel.controls['portionNo'].errors?.['required']) {
-                            <span className="error">Value is required</span>
-                        } @else if(formModel.controls['portionNo'].hasError('positiveNumberValidator')) {
-                            <span className="error">Value must be a number grater than 0</span>
-                        }
-                        </div>
-                
-                        <div className="form-thing">
-                        <label className="label">Weight of a portion</label>
-                        <input type="number" placeholder="Weight of a portion (g)" formControlName="portionWe">
-                        @if(formModel.controls['portionWe'].errors?.['required']) {
-                            <span className="error">Value is required</span>
-                        } @else if(formModel.controls['portionWe'].hasError('positiveNumberValidator')) {
-                            <span className="error">Value must be a number grater than 0</span>
-                        }
-                        </div>
-                
-                        <div className="form-thing">
-                        <label className="label">Calories per portion</label>
-                        <input type="number" placeholder="Calories per portion (kCal)" formControlName="portionCal">
-                        @if(formModel.controls['portionCal'].errors?.['required']) {
-                            <span className="error">Value is required</span>
-                        } @else if(formModel.controls['portionCal'].hasError('positiveNumberValidator')) {
-                            <span className="error">Value must be a number grater than 0</span>
-                        }
-                        </div>
+  const [NewMealName, setMealName] = useState<string>('');
+  const [NewMealItems, setMealItems] = useState<number[]>([]);
+  const [NewMealDescription, setMealDescription] = useState<string>('');
+  const [NewMealNumPortions, setMealNumPotions] = useState<number>(0);
+  const [NewMealPortion, setMealPortion] = useState<number>(0);
+  const [NewMealCalories, setMealCalories] = useState<number>(0);
+  const [meals, setMeals] = useState<MealData[]>([]);
+  const [isFormNotValid, setIsFormNotValid] = useState(true);
+  const [items, setItems] = useState<ItemData[]>([]); 
+  const [selectedItems, setSelectedItems] = useState<number[]>([]);
 
-                        <div className="form-thing"><label for="items" className="label" >Items:</label>
-                        <select className="item" formControlName="items" multiple>
-                            @for(i of itemList; track $index) {
-                            <option [value]="i.id">{{i.name}}</option>
-                            }
-                        </select>
-                        </div>
+       useEffect(() => {
+           const fetchItems = async () => {
+             try {
+               const data = await getItems();
+               if (Array.isArray(data)) {
+                   setItems(data);
+               }
+             } catch (error) {
+               console.error('Error loading items:', error);
+             }
+           };
+           fetchItems();
+         }, []);
+    
+
+  const HandlePost = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (NewMealName.length > 0) {
+        try {
+            const newMeal = await addMeal({
+                items: selectedItems,
+                name: NewMealName,
+                description: NewMealDescription,
+                numberOfPortions: NewMealNumPortions,
+                portionWeight: NewMealPortion,
+                caloriesPerPortion: NewMealCalories,
                 
-                        <div className="form-thing">
-                        <input [disabled]="!formModel.valid" type="submit" value="Add meal" className="btn-view">
-                        </div>
-                    </form> */}
-                </div>
+            });
+            setMeals(prevItems => [...prevItems, newMeal]);
+        setMealName('');
+      } catch (error) {
+        console.error('Error adding meal:', error);
+      }
+    } else {
+      console.log('Please provide a valid meal name.');
+    }
+  };
+
+  const HandleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setMealName(event.target.value);
+    setIsFormNotValid(event.target.value.trim().length === 0);
+  };
+
+  const handleNumberChange = (setter: React.Dispatch<React.SetStateAction<number>>) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = parseFloat(event.target.value);
+    setter(isNaN(value) ? 0 : value); 
+  };
+
+  const handleItemChange = (id: number) => {
+    if (selectedItems.includes(id)) {
+      console.log( "Selsected all: " + id);
+      setSelectedItems(selectedItems.filter((allergenId) => allergenId !== id));
+
+    } else {
+      setSelectedItems([...selectedItems, id]);
+    }
+  };
+
+
+
+  return (
+    <>
+      <div className="main-container">
+        <h1>Add meal</h1>
+        <div className="form-container">
+          <form onSubmit={HandlePost}>
+            <div className="form-thing">
+              <label>Name</label>
+              <input
+                name="NewMealNameInput"
+                value={NewMealName}
+                onChange={HandleInputChange}
+              />
             </div>
-        </>
-    );
+
+            <div className="form-thing">
+              <label>Description</label>
+              <input
+                name="NewMealDescriptionInput"
+                value={NewMealDescription}
+                onChange={(e) => setMealDescription(e.target.value)}
+              />
+            </div>
+
+            <div className="form-thing">
+              <label>Number of portions</label>
+              <input
+                name="NewNumPortionsInput"
+                value={NewMealNumPortions}
+              onChange={handleNumberChange(setMealNumPotions)}
+                type="number"
+              />
+            </div>
+
+            <div className="form-thing">
+              <label>Portion weight</label>
+              <input
+                name="NewItemPortionInput"
+                value={NewMealPortion}
+              onChange={handleNumberChange(setMealPortion)}
+                type="number"
+              />
+            </div>
+
+            <div className="form-thing">
+              <label>Calories per portions</label>
+              <input
+                name="NewMealCaloriesInput"
+                value={NewMealCalories}
+                onChange={handleNumberChange(setMealCalories)}
+                type="number"
+              />
+            </div>            
+
+   
+            <div className="form-thing">
+              <label>Items</label>
+              <div>
+                {items.map((item) => (
+                  <div key={item.id}>
+                    <label>
+                      <input
+                        type="checkbox"
+                        checked={selectedItems.includes(item.id)}
+                        onChange={() => handleItemChange(item.id)}
+                      />
+                      {item.name}
+                    </label>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="form-thing">
+              <LightButton
+                label="Confirm"
+                disabled={isFormNotValid}
+              />
+            </div>
+          </form>
+        </div>
+      </div>
+    </>
+  );
 };
 
 export default AddMeal;

@@ -4,7 +4,6 @@ import { AllergenData } from "./AllergenService";
 
 
 export interface NewItemData {
-  
   allergens: number[];
   name: string;
   description: string;
