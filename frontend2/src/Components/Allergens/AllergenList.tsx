@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import "../../Styles/List.css"
-import { getAllAllergens, AllergenData} from "../../Services/AllergenService";
+import { getAllAllergens, AllergenData, deleteAllergen} from "../../Services/AllergenService";
 import { NavLink } from 'react-router-dom';
-import { LightButton } from '../Button';
+import { LightButton, RedButton } from '../Button';
 
 const AllergenList = () => {
     const [allergens, setAllergens] = useState<AllergenData[]>([]); 
@@ -21,6 +21,20 @@ const AllergenList = () => {
         fetchAllergens();
       }, []);
 
+      const HandleDelete = async (id: number) => {
+        try {
+            await deleteAllergen(id);
+
+            setAllergens((prevAllergens) =>
+                prevAllergens.filter((allergen) => allergen.id !== id)
+            );
+
+            console.log('Allergen deleted successfully');
+        } catch (error) {
+            console.error('Error deleting allergen:', error);
+        }
+    };
+
       
     return (
         <div className="main-container">
@@ -32,8 +46,9 @@ const AllergenList = () => {
                             <li key = {allergen.id} className="list-item-container">
                                 <p className="name">{allergen.name}</p>
                                 <NavLink to={`/editAllergen/${allergen.id}`}>
-                                    <LightButton label={'EditAllergen'} />
+                                    <LightButton label={'Edit'} />
                                 </NavLink>
+                                <RedButton label={'Delete'} onClick={() => HandleDelete(allergen.id)}/>
                             </li>
                     ))}
                 </div>
@@ -41,10 +56,6 @@ const AllergenList = () => {
         </div>
     );
 };
-                    
-
-
-
                     {/* <button className="btn-view" (click)="update(allergen.id)"> Edit </button> */}
                     
                     {/*   <button className="btn-view2" (click)="showConfirmation(allergen.id)"> Delete </button> */}
