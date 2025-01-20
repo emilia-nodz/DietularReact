@@ -1,7 +1,83 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "../../Styles/Form.css"
+import { useParams } from "react-router-dom";
+import { AllergenData } from "../../Services/AllergenService";
+import { getItemById, ItemData } from "../../Services/ItemService";
 
 const EditItem = () => {
+    const { id } = useParams<{ id: string }>();
+    
+    const [NewItemName, setItemName] = useState<string>('');
+    const [NewItemDescription, setItemDescription] = useState<string>('');
+    const [NewItemWeight, setItemWeight] = useState<number>(0);
+    const [NewItemCalories, setItemCalories] = useState<number>(0);
+    const [NewItemCarbohydrates, setItemCarbohydrates] = useState<number>(0);
+    const [NewItemProteins, setItemProteins] = useState<number>(0);
+    const [NewItemFats, setItemFats] = useState<number>(0);
+    const [selectedAllergens, setSelectedAllergens] = useState<number[]>([]);
+    const [items, setItems] = useState<ItemData[]>([]);
+    const [isFormNotValid, setIsFormNotValid] = useState(true);
+    const [allergens, setAllergens] = useState<AllergenData[]>([]); 
+    const [OldItemName, setOldItemName] = useState<string>('');
+    const [OldItemDescription, setOldItemDescription] = useState<string>('');
+    const [OldItemWeight, setOldItemWeight] = useState<number>(0);
+    const [OldItemCalories, setOldItemCalories] = useState<number>(0);
+    const [OldItemCarbohydrates, setOldItemCarbohydrates] = useState<number>(0);
+    const [OldItemProteins, setOldItemProteins] = useState<number>(0);
+    const [OldItemFats, setOldItemFats] = useState<number>(0);
+
+
+    useEffect(() => {
+        const fetchItem = async () => {
+            try {
+                const item= await getItemById(Number(id));
+                setOldItemName(item.name);
+                setItemName(item.name);
+                setOldItemDescription(item.description);
+                setItemDescription(item.description);
+                setOldItemWeight(item.weight);
+                setItemWeight(item.weight);
+                setOldItemCalories(item.calories);
+                setItemCalories(item.calories);
+                setOldItemCarbohydrates(item.carbohydrates);
+                setItemCarbohydrates(item.carbohydrates);
+                setOldItemProteins(item.proteins);
+                setItemProteins(item.proteins);
+                setOldItemFats(item.fats);
+                setItemFats(item.fats);
+                
+            } catch (error) {
+                console.error('Error getting item:', error);
+            }
+        };
+
+        if (id) {
+            fetchItem();
+        }
+    }, [id]); 
+
+    const HandlePost = async () => {
+        if (NewItemName.length > 0) {
+            try {
+                const updatedAllergen = await updateAllergen(Number(id), { name: NewAllergenName });
+
+                setAllergens(prevAllergens =>
+                prevAllergens.map(allergen =>
+                    allergen.id === updatedAllergen.id ? updatedAllergen : allergen
+                )
+                );
+
+                setAllergenName('');
+                setIsFormNotValid(true);
+                console.log("Allergen updated successfully!");
+            } catch (error) {
+                console.error("Error updating allergen:", error);
+            }
+        } else {
+        console.log("Please provide a valid allergen name.");
+        }
+    };
+
     return (
         <>
             <div className="main-container">
