@@ -48,46 +48,29 @@ const AddItem = () => {
     e.preventDefault();
     if (NewItemName.length > 0) {
         try {
-            console.log("In try");
-            const allergenIds: number[] = selectedAllergens as number[];
+          console.log("In try");
             
-            const allergenDetails = allergens.filter(allergen =>
-                selectedAllergens.includes(allergen.id)
-              );
-
-              console.log("Sending data:", {
-                id:0,
-                allergen_details: allergenDetails,
-                name: NewItemName,
-                description: NewItemDescription,
-                weight: NewItemWeight,
-                calories: NewItemCalories,
-                carbohydrates: NewItemCarbohydrates,
-                proteins: NewItemProteins,
-                fats: NewItemFats,
-            });
-            const newItem = await addItem({
-              allergens: selectedAllergens,
-              name: NewItemName,
-              description: NewItemDescription,
-              weight: NewItemWeight,
-              calories: NewItemCalories,
-              carbohydrates: NewItemCarbohydrates,
-              proteins: NewItemProteins,
-              fats: NewItemFats,
-            });
-            console.log(allergenIds + " " + NewItemName + " " + NewItemDescription + " " + NewItemWeight);
-            setItems(prevItems => [...prevItems, newItem]);
-        setItemName('');
-        setItemDescription('');
-        setItemWeight(0);
-        setItemCalories(0);
-        setItemCarbohydrates(0);
-        setItemProteins(0);
-        setItemFats(0);
-        setSelectedAllergens([]); 
-        setIsFormNotValid(false);
-      } catch (error) {
+          const newItem = await addItem({
+            allergens: selectedAllergens,
+            name: NewItemName,
+            description: NewItemDescription,
+            weight: NewItemWeight,
+            calories: NewItemCalories,
+            carbohydrates: NewItemCarbohydrates,
+            proteins: NewItemProteins,
+            fats: NewItemFats,
+          });
+          setItems(prevItems => [...prevItems, newItem]);
+          setItemName('');
+          setItemDescription('');
+          setItemWeight(0);
+          setItemCalories(0);
+          setItemCarbohydrates(0);
+          setItemProteins(0);
+          setItemFats(0);
+          setSelectedAllergens([]); 
+          setIsFormNotValid(false);
+        } catch (error) {
         console.error('Error adding item:', error);
       }
     } else {
