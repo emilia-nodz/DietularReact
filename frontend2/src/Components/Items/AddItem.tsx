@@ -44,17 +44,30 @@ const AddItem = () => {
       };
       
 
-  const HandlePost = async () => {
+  const HandlePost = async (e: React.FormEvent) => {
+    e.preventDefault();
     if (NewItemName.length > 0) {
         try {
             console.log("In try");
             const allergenIds: number[] = selectedAllergens as number[];
-
+            
             const allergenDetails = allergens.filter(allergen =>
                 selectedAllergens.includes(allergen.id)
               );
+
+              console.log("Sending data:", {
+                id:0,
+                allergen_details: allergenDetails,
+                name: NewItemName,
+                description: NewItemDescription,
+                weight: NewItemWeight,
+                calories: NewItemCalories,
+                carbohydrates: NewItemCarbohydrates,
+                proteins: NewItemProteins,
+                fats: NewItemFats,
+            });
             const newItem = await addItem({
-              allergen_details: allergenDetails,
+              allergens: selectedAllergens,
               name: NewItemName,
               description: NewItemDescription,
               weight: NewItemWeight,
@@ -65,7 +78,6 @@ const AddItem = () => {
             });
             console.log(allergenIds + " " + NewItemName + " " + NewItemDescription + " " + NewItemWeight);
             setItems(prevItems => [...prevItems, newItem]);
-        setItems([...items, newItem]);
         setItemName('');
         setItemDescription('');
         setItemWeight(0);

@@ -4,26 +4,27 @@ import { AllergenData } from "./AllergenService";
 
 
 export interface NewItemData {
-    allergen_details: AllergenData[];
-    name: string;
-    description: string;
-    weight: number;
-    calories: number;
-    carbohydrates: number;
-    proteins: number;
-    fats: number;
+  
+  allergens: number[];
+  name: string;
+  description: string;
+  weight: number;
+  calories: number;
+  carbohydrates: number;
+  proteins: number;
+  fats: number;
   }
 
 export interface ItemData {
-    allergen_details: AllergenData[];
-    id: number;
-    name: string;
-    description: string;
-    weight: number;
-    calories: number;
-    carbohydrates: number;
-    proteins: number;
-    fats: number;
+  id: number;
+  allergen_details: AllergenData[];
+  name: string;
+  description: string;
+  weight: number;
+  calories: number;
+  carbohydrates: number;
+  proteins: number;
+  fats: number;
   }
 
 
