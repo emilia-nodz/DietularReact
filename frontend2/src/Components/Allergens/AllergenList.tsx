@@ -29,7 +29,7 @@ const AllergenList = () => {
             <ul>
                 <div className="list-container">
                     {allergens.map((allergen) => (
-                        <li key = {allergen.id} className="list-allergen-container">
+                        <li key = {allergen.id} className="list-item-container">
                             <p className="name">{allergen.name}</p>
                             </li>
                     ))}

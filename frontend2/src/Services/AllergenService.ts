@@ -31,4 +31,24 @@ export const addAllergen = async (allergenData: NewAllergenData): Promise<Allerg
     }
 };
 
+export const deleteAllergen = async (id: number): Promise<void> => {
+    try {
+        await AxiosInstance.delete(`allergen/${id}/`);
+        console.log(`Allergen with id ${id} deleted successfully.`);
+    } catch (error) {
+        console.error(`Error deleting allergen with id ${id}:`, error);
+        throw error;
+    }
+};
+
+export const updateAllergen = async (id: number, allergenData: NewAllergenData): Promise<AllergenData> => {
+    try {
+        const response = await AxiosInstance.patch(`allergen/${id}/`, allergenData);
+        return response.data;
+    } catch (error) {
+        console.error(`Error updating allergen with id ${id}:`, error);
+        throw error;
+    }
+};
+
 
