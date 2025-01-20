@@ -81,7 +81,6 @@ const EditAllergen = () => {
                 />
                 </div>
                 <div className="form-thing">
-                <NavLink to="/allergens">
                     <LightButton
                         label="Confirm"
                         disabled={isFormNotValid}
@@ -90,7 +89,6 @@ const EditAllergen = () => {
                         label="Cancel"
                         onClick={(e) => HandleCancel(e)}
                     />
-                </NavLink>
                 </div>
             </form>
             </div>

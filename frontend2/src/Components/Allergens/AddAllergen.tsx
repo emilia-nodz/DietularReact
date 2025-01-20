@@ -6,7 +6,6 @@ import { LightButton } from "../Button";
 const AddAllergen = () => {
     const [NewAllergenName, setAllergenName] = useState<string>('');
     const [allergens, setAllergens] = useState<AllergenData[]>([]); 
-
     const [isFormNotValid, setIsFormNotValid] = useState(true);
 
     const HandlePost = async () => {

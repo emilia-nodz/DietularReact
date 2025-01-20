@@ -35,12 +35,6 @@ const ItemList = () => {
     }
   };
 
-
-
-
-
-
-
   return (
     <>
       <div className="main-container">
@@ -51,7 +45,7 @@ const ItemList = () => {
             {items.map((item) => (
               <li key = {item.id} className="list-item-container">
                 <p className="name">{item.name}</p>
-                <NavLink to={`/editAllergen/${item.id}`}>
+                <NavLink to={`/editItem/${item.id}`}>
                   <LightButton label={'Edit'} />
                 </NavLink>
                   <RedButton label={'Delete'} onClick={() => HandleDelete(item.id)}/>
