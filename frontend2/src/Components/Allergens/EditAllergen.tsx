@@ -16,7 +16,7 @@ const EditAllergen = () => {
     
 
     useEffect(() => {
-        const getAllergen = async () => {
+        const fetchAllergen = async () => {
             try {
                 const allergen = await getAllergenById(Number(id));
                 setOldAllergenName(allergen.name);
@@ -28,7 +28,7 @@ const EditAllergen = () => {
         };
 
         if (id) {
-            getAllergen();
+            fetchAllergen();
         }
     }, [id]); 
 
