@@ -12,7 +12,6 @@ const AddAllergen = () => {
     const HandlePost = async () => {
         if(NewAllergenName.length>0) {
             try {
-                
                 const newAllergen = await addAllergen({name: NewAllergenName})
                 setAllergens([...allergens, newAllergen]);
                 setAllergenName('');
