@@ -8,6 +8,7 @@ import AddAllergen from '../Components/Allergens/AddAllergen';
 import AddItem from '../Components/Items/AddItem';
 import AddMeal from '../Components/Meals/AddMeal';
 import EditAllergen from '../Components/Allergens/EditAllergen';
+import EditItem from '../Components/Items/EditItem';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path="/addItem" element={<AddItem />} />
         <Route path="/addMeal" element={<AddMeal />} />
         <Route path="/editAllergen/:id" element={<EditAllergen/>} />
+        <Route path="/editItem/:id" element={<EditItem/>} />
 
       </Routes>
     </>
