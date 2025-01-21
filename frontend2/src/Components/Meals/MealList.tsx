@@ -1,44 +1,59 @@
 import React, { useState, useEffect } from 'react';
 import "../../Styles/List.css"
-import { getMeals, MealData} from "../../Services/MealService";
+import { deleteMeal, getMeals, MealData} from "../../Services/MealService";
+import { LightButton, RedButton } from '../Button';
+import { NavLink } from 'react-router-dom';
 
 const MealList = () => {
-
-
   const [meals, setMeals] = useState<MealData[]>([]); 
 
-    useEffect(() => {
-        const fetchMeals = async () => {
-          try {
-            const data = await getMeals();
-            if (Array.isArray(data)) {
-                setMeals(data);
-            }
-          } catch (error) {
-            console.error('Error loading meals:', error);
-          }
-        };
-        fetchMeals();
-      }, []);
+  useEffect(() => {
+    const fetchMeals = async () => {
+      try {
+        const data = await getMeals();
+        if (Array.isArray(data)) {
+          setMeals(data);
+        }
+      } catch (error) {
+        console.error('Error loading meals:', error);
+      }
+    };
+    fetchMeals();
+  }, []);
 
-    return (
-        <>
-        <div className="main-container">
-        <h1>Meal list</h1>
+  const HandleDelete = async (id: number) => {
+    try {
+        await deleteMeal(id);
+    
+        setMeals((prevMeals) =>
+            prevMeals.filter((meal) => meal.id !== id)
+        );
+    
+        console.log('Item deleted successfully');
+    } catch (error) {
+        console.error('Error deleting meal:', error);
+    }
+  };
 
-            <ul>
-            <div className="list-container">
+  return (
+    <>
+      <div className="main-container">
+      <h1>Meal list</h1>
 
-                {meals.map((meal) => (
-                    <li key = {meal.id} className="list-item-container">
-                        <p className="name">{meal.name}</p>
-                        </li>
-                ))}
-            
-
-             </div>
-             </ul>
-             </div>
-             </>
+        <ul>
+          <div className="list-container">
+            {meals.map((meal) => (
+              <li key = {meal.id} className="list-item-container">
+                  <p className="name">{meal.name}</p>
+                  <NavLink to={`/editMeal/${meal.id}`}>
+                    <LightButton label={'Edit'} />
+                  </NavLink>
+                    <RedButton label={'Delete'} onClick={() => HandleDelete(meal.id)}/>
+              </li>
+            ))}
+          </div>
+        </ul>
+      </div>
+    </>
 )};
 export default MealList;
