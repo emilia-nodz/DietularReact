@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../../Styles/Form.css"
 import { useParams } from "react-router-dom";
-import { AllergenData } from "../../Services/AllergenService";
+import { AllergenData, getAllAllergens } from "../../Services/AllergenService";
 import { getItemById, ItemData } from "../../Services/ItemService";
 
 const EditItem = () => {
@@ -45,6 +45,14 @@ const EditItem = () => {
                 setItemProteins(item.proteins);
                 setOldItemFats(item.fats);
                 setItemFats(item.fats);
+                const allergenIds = item.allergen_details.map((allergen) => allergen.id);
+                        setSelectedAllergens(allergenIds);
+                        
+
+                        const allergenData = await getAllAllergens();
+                        if (Array.isArray(allergenData)) {
+                            setAllergens(allergenData);
+                        }
                 
             } catch (error) {
                 console.error('Error getting item:', error);
@@ -56,32 +64,33 @@ const EditItem = () => {
         }
     }, [id]); 
 
-    const HandlePost = async () => {
-        if (NewItemName.length > 0) {
-            try {
-                const updatedAllergen = await updateAllergen(Number(id), { name: NewAllergenName });
 
-                setAllergens(prevAllergens =>
-                prevAllergens.map(allergen =>
-                    allergen.id === updatedAllergen.id ? updatedAllergen : allergen
-                )
-                );
+    // const HandlePost = async () => {
+    //     if (NewItemName.length > 0) {
+    //         try {
+    //             const updatedAllergen = await updateAllergen(Number(id), { name: NewAllergenName });
 
-                setAllergenName('');
-                setIsFormNotValid(true);
-                console.log("Allergen updated successfully!");
-            } catch (error) {
-                console.error("Error updating allergen:", error);
-            }
-        } else {
-        console.log("Please provide a valid allergen name.");
-        }
-    };
+    //             setAllergens(prevAllergens =>
+    //             prevAllergens.map(allergen =>
+    //                 allergen.id === updatedAllergen.id ? updatedAllergen : allergen
+    //             )
+    //             );
+
+    //             setAllergenName('');
+    //             setIsFormNotValid(true);
+    //             console.log("Allergen updated successfully!");
+    //         } catch (error) {
+    //             console.error("Error updating allergen:", error);
+    //         }
+    //     } else {
+    //     console.log("Please provide a valid allergen name.");
+    //     }
+    // };
 
     return (
         <>
             <div className="main-container">
-                <h1>Add item</h1>
+                <h1>Edit item</h1>
                 <div className="form-container">
                 
 
@@ -174,5 +183,4 @@ const EditItem = () => {
         </>
     );
 };
-
 export default EditItem;
