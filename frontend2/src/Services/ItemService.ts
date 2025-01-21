@@ -1,9 +1,7 @@
 import AxiosInstance from "./Axios";
 import { AllergenData } from "./AllergenService";
 
-
-
-export interface NewItemData {
+export interface NewItemData { 
   allergens: number[];
   name: string;
   description: string;
@@ -12,7 +10,7 @@ export interface NewItemData {
   carbohydrates: number;
   proteins: number;
   fats: number;
-  }
+}
 
 export interface ItemData {
   id: number;
@@ -24,9 +22,7 @@ export interface ItemData {
   carbohydrates: number;
   proteins: number;
   fats: number;
-  }
-
-
+}
 
 export const getItems = async(): Promise<ItemData[]> => {
     try {
@@ -37,7 +33,7 @@ export const getItems = async(): Promise<ItemData[]> => {
         console.error('Error fetching items:', error);
         throw error;
       }
-    };
+};
 
 export const addItem = async (itemData: NewItemData): Promise<ItemData> => {
     try {
@@ -66,6 +62,16 @@ export const updateItem = async (id: number, itemData: NewItemData): Promise<Ite
     } catch (error) {
         console.error(`Error updating item with id ${id}:`, error);
         throw error;
+    }
+};
+
+export const getItemById = async (id: number): Promise<ItemData> => {
+    try {
+      const response = await AxiosInstance.get(`item/${id}/`);
+      return response.data;
+    } catch (error) {
+      console.error(`Error fetching item with id ${id}:`, error);
+      throw error;
     }
 };
 

@@ -17,77 +17,60 @@ const AddItem = () => {
   const [isFormNotValid, setIsFormNotValid] = useState(true);
   const [allergens, setAllergens] = useState<AllergenData[]>([]); 
 
-    useEffect(() => {
-        const fetchAllergens = async () => {
-          try {
-            const data = await getAllAllergens();
-            if (Array.isArray(data)) {
-                setAllergens(data);
-            }
-          } catch (error) {
-            console.error('Error loading allergens:', error);
-          }
-        };
-        fetchAllergens();
-      }, []);
-
-
-
-      const handleAllergenChange = (id: number) => {
-        if (selectedAllergens.includes(id)) {
-          console.log( "Selsected all: " + id);
-          setSelectedAllergens(selectedAllergens.filter((allergenId) => allergenId !== id));
-
-        } else {
-          setSelectedAllergens([...selectedAllergens, id]);
+  useEffect(() => {
+    const fetchAllergens = async () => {
+      try {
+        const data = await getAllAllergens();
+        if (Array.isArray(data)) {
+            setAllergens(data);
         }
-      };
+      } catch (error) {
+          console.error('Error loading allergens:', error);
+      }
+    };
+    fetchAllergens();
+  }, []);
+
+
+
+  const HandleAllergenChange = (id: number) => {
+    if (selectedAllergens.includes(id)) {
+      console.log( "Selsected all: " + id);
+      setSelectedAllergens(selectedAllergens.filter((allergenId) => allergenId !== id));
+
+    } else {
+      setSelectedAllergens([...selectedAllergens, id]);
+    }
+  };
       
 
   const HandlePost = async (e: React.FormEvent) => {
     e.preventDefault();
     if (NewItemName.length > 0) {
         try {
-            console.log("In try");
-            const allergenIds: number[] = selectedAllergens as number[];
+          console.log("In try");
             
-            const allergenDetails = allergens.filter(allergen =>
-                selectedAllergens.includes(allergen.id)
-              );
-
-              console.log("Sending data:", {
-                id:0,
-                allergen_details: allergenDetails,
-                name: NewItemName,
-                description: NewItemDescription,
-                weight: NewItemWeight,
-                calories: NewItemCalories,
-                carbohydrates: NewItemCarbohydrates,
-                proteins: NewItemProteins,
-                fats: NewItemFats,
-            });
-            const newItem = await addItem({
-              allergens: selectedAllergens,
-              name: NewItemName,
-              description: NewItemDescription,
-              weight: NewItemWeight,
-              calories: NewItemCalories,
-              carbohydrates: NewItemCarbohydrates,
-              proteins: NewItemProteins,
-              fats: NewItemFats,
-            });
-            console.log(allergenIds + " " + NewItemName + " " + NewItemDescription + " " + NewItemWeight);
-            setItems(prevItems => [...prevItems, newItem]);
-        setItemName('');
-        setItemDescription('');
-        setItemWeight(0);
-        setItemCalories(0);
-        setItemCarbohydrates(0);
-        setItemProteins(0);
-        setItemFats(0);
-        setSelectedAllergens([]); 
-        setIsFormNotValid(false);
-      } catch (error) {
+          const newItem = await addItem({
+            allergens: selectedAllergens,
+            name: NewItemName,
+            description: NewItemDescription,
+            weight: NewItemWeight,
+            calories: NewItemCalories,
+            carbohydrates: NewItemCarbohydrates,
+            proteins: NewItemProteins,
+            fats: NewItemFats,
+          });
+          setItems(prevItems => [...prevItems, newItem]);
+          setItemName('');
+          setItemDescription('');
+          setItemWeight(0);
+          setItemCalories(0);
+          setItemCarbohydrates(0);
+          setItemProteins(0);
+          setItemFats(0);
+          setSelectedAllergens([]); 
+          setIsFormNotValid(false);
+        } catch (error) {
         console.error('Error adding item:', error);
       }
     } else {
@@ -100,7 +83,7 @@ const AddItem = () => {
     setIsFormNotValid(event.target.value.trim().length === 0);
   };
 
-  const handleNumberChange = (setter: React.Dispatch<React.SetStateAction<number>>) => (event: React.ChangeEvent<HTMLInputElement>) => {
+  const HandleNumberChange = (setter: React.Dispatch<React.SetStateAction<number>>) => (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseFloat(event.target.value);
     setter(isNaN(value) ? 0 : value); 
   };
@@ -132,7 +115,7 @@ const AddItem = () => {
               <input
                 name="NewItemWeightInput"
                 value={NewItemWeight}
-              onChange={handleNumberChange(setItemWeight)}
+              onChange={HandleNumberChange(setItemWeight)}
                 type="number"
               />
             </div>
@@ -141,7 +124,7 @@ const AddItem = () => {
               <input
                 name="NewItemCaloriesInput"
                 value={NewItemCalories}
-                onChange={handleNumberChange(setItemCalories)}
+                onChange={HandleNumberChange(setItemCalories)}
                 type="number"
               />
             </div>
@@ -150,7 +133,7 @@ const AddItem = () => {
               <input
                 name="NewItemCarbohydratesInput"
                 value={NewItemCarbohydrates}
-                onChange={handleNumberChange(setItemCarbohydrates)}
+                onChange={HandleNumberChange(setItemCarbohydrates)}
                 type="number"
               />
             </div>
@@ -159,7 +142,7 @@ const AddItem = () => {
               <input
                 name="NewItemProteinsInput"
                 value={NewItemProteins}
-                onChange={handleNumberChange(setItemProteins)}
+                onChange={HandleNumberChange(setItemProteins)}
                 type="number"
               />
             </div>
@@ -168,7 +151,7 @@ const AddItem = () => {
               <input
                 name="NewItemFatsInput"
                 value={NewItemFats}
-                 onChange={handleNumberChange(setItemFats)}
+                 onChange={HandleNumberChange(setItemFats)}
                 type="number"
               />
             </div>
@@ -183,7 +166,7 @@ const AddItem = () => {
                       <input
                         type="checkbox"
                         checked={selectedAllergens.includes(allergen.id)}
-                        onChange={() => handleAllergenChange(allergen.id)}
+                        onChange={() => HandleAllergenChange(allergen.id)}
                       />
                       {allergen.name}
                     </label>
