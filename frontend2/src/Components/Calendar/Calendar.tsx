@@ -8,7 +8,7 @@ interface SelectedDay{
     day: number;
 }
 
-const Calendar: React.FC = () => {
+export const Calendar = () => {
     const [currentDate, setCurrentDate] = useState(new Date());
     const [selectedDay, setSelectedDay] = useState<SelectedDay | null>(null);
 

@@ -12,18 +12,18 @@ interface DayDetailProps {
     day: Day | null;
 }
 
-const DayDetail: React.FC<DayDetailProps> = ({ day }) => {
+export const DayDetail = (props:DayDetailProps ) => {
     const [showItemDropdown, setShowItemDropdown] = useState(false);
     const [showMealDropdown, setShowMealDropdown] = useState(false);
     const [tempItems, setTempItems] = useState<{ id: number; name: string }[]>([]);
     const [tempMeals, setTempMeals] = useState<{ id: number; name: string }[]>([]);
 
     useEffect(() => {
-        if (day) {
-            setTempItems(day.item_details || []);
-            setTempMeals(day.meal_details || []);
+        if (props.day) {
+            setTempItems(props.day.item_details || []);
+            setTempMeals(props.day.meal_details || []);
         }
-    }, [day]);
+    }, [props.day]);
 
     const itemClick = () => setShowItemDropdown(!showItemDropdown);
     const mealClick = () => setShowMealDropdown(!showMealDropdown);
@@ -45,25 +45,25 @@ const DayDetail: React.FC<DayDetailProps> = ({ day }) => {
     };
 
     const saveDay = () => {
-        if (!day) {
+        if (!props.day) {
             console.warn("No day to save");
             return;
         }
         console.log("Saving day:", {
-            id: day.id,
-            date: day.date,
+            id: props.day.id,
+            date: props.day.date,
             items: tempItems,
             meals: tempMeals,
         });
     };
 
-    if (!day) {
+    if (!props.day) {
         return null;
     }
 
     return (
         <div className={styles.dayDetailContainer}>
-            <h3>Details for {new Date(day.date).toLocaleDateString("pl-PL", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}</h3>
+            <h3>Details for {new Date(props.day.date).toLocaleDateString("pl-PL", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}</h3>
 
             {/* ITEMS SECTION */}
             <div className={styles.section}>
