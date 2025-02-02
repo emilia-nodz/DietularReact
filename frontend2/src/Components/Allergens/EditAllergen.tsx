@@ -8,7 +8,6 @@ import { LightButton, RedButton } from "../Button";
 
 const EditAllergen = () => {
     const { id } = useParams<{ id: string }>(); 
-    
     const [NewAllergenName, setAllergenName] = useState<string>('');
     const [allergens, setAllergens] = useState<AllergenData[]>([]); 
     const [isFormNotValid, setIsFormNotValid] = useState(true);
