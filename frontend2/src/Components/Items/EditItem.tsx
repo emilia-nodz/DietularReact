@@ -25,6 +25,7 @@ const EditItem = () => {
     const [allergens, setAllergens] = useState<AllergenData[]>([]);
     const [isFormNotValid, setIsFormNotValid] = useState(true);
     const[nameContainsOnlyLetters, updateNameContainsOnlyLetters] = useState(false);
+    const [nameTouched, setNameTouched] = useState(false);
     const [numberGreaterThanZero, updateNumberGreaterThanZero] = useState({
         weight: true,
         calories: true,
@@ -143,6 +144,9 @@ const EditItem = () => {
     };
 
     const handleCombinedChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (!nameTouched){
+            setNameTouched(true);
+        }
         handleInputChange(event);
         validateData(event);
     };
@@ -164,7 +168,7 @@ const EditItem = () => {
                 value={newItemData.name} 
                 onChange={handleCombinedChange} 
                 />
-                <Error status={nameContainsOnlyLetters} info="Name must consist of only letters"/>              
+                <Error status={nameContainsOnlyLetters || !nameTouched} info="Name must consist of only letters"/>              
             </div>
             <div className="form-thing">
                 <label>Description</label>

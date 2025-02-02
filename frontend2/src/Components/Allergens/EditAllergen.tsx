@@ -16,7 +16,7 @@ const EditAllergen = () => {
     const [OldAllergenName, setOldAllergenName] = useState<string>(''); 
 
     const[nameContainsOnlyLetters, updatenameContainsOnlyLetters] = useState(false);
-    
+    const [nameTouched, setNameTouched] = useState(false);
 
     useEffect(() => {
         const fetchAllergen = async () => {
@@ -85,6 +85,9 @@ const EditAllergen = () => {
     }
 
     const handleCombinedChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (!nameTouched){
+            setNameTouched(true);
+        }
         handleInputChange(event);
         validateData(event);
     };
@@ -102,7 +105,7 @@ const EditAllergen = () => {
                     value={NewAllergenName} 
                     onChange={handleCombinedChange} 
                 />
-                <Error status={nameContainsOnlyLetters} info="Name must consist of only letters"/>
+                <Error status={nameContainsOnlyLetters || !nameTouched} info="Name must consist of only letters"/>
                 </div>
                 <div className="form-thing">
                     <LightButton

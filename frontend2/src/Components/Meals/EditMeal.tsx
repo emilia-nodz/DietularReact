@@ -23,7 +23,7 @@ const EditMeal = () => {
     const [items, setItems] = useState<ItemData[]>([]);
     const [isFormNotValid, setIsFormNotValid] = useState(true);
     const[nameContainsOnlyLetters, updatenameContainsOnlyLetters] = useState(true);
-
+    const [nameTouched, setNameTouched] = useState(false);
     const [numberGreaterThanZero, updateNumberGreaterThanZero] = useState({
         numberOfPortions: true,
         portionWeight: true,
@@ -134,6 +134,9 @@ const EditMeal = () => {
     };
 
     const handleCombinedChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (!nameTouched){
+            setNameTouched(true);
+        }
         handleInputChange(event);
         validateData(event);
     };
@@ -155,7 +158,7 @@ const EditMeal = () => {
                 value={newMealData.name} 
                 onChange={handleCombinedChange} 
                 />
-                <Error status={!nameContainsOnlyLetters} info="Name must consist of only letters"/>   
+                <Error status={!nameContainsOnlyLetters || !nameTouched} info="Name must consist of only letters"/>   
             </div>
             <div className="form-thing">
                 <label>Description</label>
