@@ -65,7 +65,7 @@ export const Calendar = () => {
                 id: data.id,
                 date: data.date,
                 item_details: data.item_details ? data.item_details : [],
-                meal_details: []
+                meal_details: data.meal_details ? data.meal_details : [] 
               }
               console.log("Dane pobrane z backendu:", data);
               console.log("Dane pobrane z backendu po transformacji:", transformedData);
