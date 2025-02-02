@@ -53,6 +53,20 @@ export const Calendar = () => {
             setSelectedDay(newDay);
         }
     };
+
+    const refreshDay = (dayId: number) => {
+        
+        getDayById(dayId).then((data) => {
+            const transformedData: Day = {
+                id: data.id,
+                date: data.date,
+                item_details: data.item_details ?? [],
+                meal_details: data.meal_details ?? []
+              }
+            setDayDetailData(transformedData)
+        })
+        
+    };
     
     useEffect(() => {
         if (selectedDay) {
@@ -64,8 +78,8 @@ export const Calendar = () => {
               const transformedData: Day = {
                 id: data.id,
                 date: data.date,
-                item_details: data.item_details ? data.item_details : [],
-                meal_details: data.meal_details ? data.meal_details : [] 
+                item_details: data.item_details ?? [],
+                meal_details: data.meal_details ?? []
               }
               console.log("Dane pobrane z backendu:", data);
               console.log("Dane pobrane z backendu po transformacji:", transformedData);
@@ -85,8 +99,8 @@ export const Calendar = () => {
                     const transformedData: Day = {
                         id: data.id,
                         date: data.date,
-                        item_details: data.items ? data.items : [],
-                        meal_details: []
+                        item_details: data.item_details ?? [],
+                        meal_details: data.meal_details ?? []
                       }
                       setDayDetailData(transformedData);
                 })
@@ -143,7 +157,7 @@ export const Calendar = () => {
             </div>
             {dayDetailData  !== null && (
                 <div className="day-container">
-                    <DayDetail day={dayDetailData} />
+                    <DayDetail day={dayDetailData} onDayUpdated={() => refreshDay(dayDetailData.id)} />
                 </div>
             )}
 
