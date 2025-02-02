@@ -79,10 +79,13 @@ export const getDayById = async (id: number): Promise<DayData> => {
   try {
     const response = await AxiosInstance.get(`day/${id}/`);
     return response.data;
-  } catch (error) {
+  } catch (error: any) {
+    if (error.response?.status === 404) {
+        throw error;
+      } else {
     console.error(`Błąd pobierania dnia o id ${id}:`, error);
     throw error;
-  }
+    }}
 };
 
 // Przypisanie itemu do konkretnego dnia

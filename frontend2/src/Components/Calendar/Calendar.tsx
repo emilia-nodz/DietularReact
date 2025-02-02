@@ -86,7 +86,9 @@ export const Calendar = () => {
               setDayDetailData(transformedData);
             })
             .catch((error) => {
-              console.log("Dzień nie istnieje, tworzenie nowego dnia...", error);
+            if (error.response?.status === 404) {
+                console.log("Dzień nie istnieje – tworzymy nowy wpis.");
+            }
               const newDayPayload = {
                 id: dayId,
                 date: dateStr, 
