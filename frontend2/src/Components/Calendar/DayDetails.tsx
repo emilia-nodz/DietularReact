@@ -1,6 +1,17 @@
 import React, { useState, useEffect } from "react";
 import styles from "./DayDetail.module.css";
+import { updateDay } from "../../Services/DayService";
+import ItemList from "./ItemList";
 
+interface Item {
+    id: number;
+    name: string;
+  }
+  
+  interface Meal {
+    id: number;
+    name: string;
+  }
 interface Day {
     id: number;
     date: string;
@@ -13,61 +24,108 @@ interface DayDetailProps {
 }
 
 export const DayDetail = (props:DayDetailProps ) => {
+    const { day } = props;
     const [showItemDropdown, setShowItemDropdown] = useState(false);
     const [showMealDropdown, setShowMealDropdown] = useState(false);
     const [tempItems, setTempItems] = useState<{ id: number; name: string }[]>([]);
     const [tempMeals, setTempMeals] = useState<{ id: number; name: string }[]>([]);
 
     useEffect(() => {
-        if (props.day) {
-            setTempItems(props.day.item_details || []);
-            setTempMeals(props.day.meal_details || []);
+        if (day) {
+            setTempItems(day.item_details || []);
+            setTempMeals(day.meal_details || []);
         }
-    }, [props.day]);
+    }, [day]);
 
     const itemClick = () => setShowItemDropdown(!showItemDropdown);
     const mealClick = () => setShowMealDropdown(!showMealDropdown);
 
-    const addItemToDay = (item: { id: number; name: string }) => {
-        setTempItems((prev) => [...prev, item]);
-    };
-
-    const removeItemFromDay = (item: { id: number; name: string }) => {
-        setTempItems((prev) => prev.filter((i) => i.id !== item.id));
-    };
-
-    const addMealToDay = (meal: { id: number; name: string }) => {
-        setTempMeals((prev) => [...prev, meal]);
-    };
-
-    const removeMealFromDay = (meal: { id: number; name: string }) => {
-        setTempMeals((prev) => prev.filter((m) => m.id !== meal.id));
-    };
-
-    const saveDay = () => {
-        if (!props.day) {
-            console.warn("No day to save");
-            return;
+    const addItemToDay = (item: Item): void => {
+        if (day) {
+          let updatedItems = day.item_details ? [...day.item_details] : [];
+          updatedItems.push(item);
+          day.item_details = updatedItems;
+          setTempItems(updatedItems);
+          console.log("Item added to day:", item);
         }
-        console.log("Saving day:", {
-            id: props.day.id,
-            date: props.day.date,
-            items: tempItems,
-            meals: tempMeals,
-        });
-    };
+      };
 
-    if (!props.day) {
+      const removeItemFromDay = (item: Item): void => {
+        if (day && day.item_details) {
+          const updatedItems = day.item_details.filter(i => i.id !== item.id);
+          day.item_details = updatedItems;
+          setTempItems(updatedItems);
+          console.log("Item removed from day:", item);
+        }
+      };
+
+      const addMealToDay = (meal: Meal): void => {
+        if (day) {
+          let updatedMeals = day.meal_details ? [...day.meal_details] : [];
+          updatedMeals.push(meal);
+          day.meal_details = updatedMeals;
+          setTempMeals(updatedMeals);
+          console.log("Meal added to day:", meal);
+        }
+      };
+
+      const removeMealFromDay = (meal: Meal): void => {
+        if (day && day.meal_details) {
+          const updatedMeals = day.meal_details.filter(m => m.id !== meal.id);
+          day.meal_details = updatedMeals;
+          setTempMeals(updatedMeals);
+          console.log("Meal removed from day:", meal);
+        }
+      }
+
+      const saveDay = (): void => {
+        if (!day) {
+          console.warn("No day to save");
+          return;
+        }
+    
+        if (!Array.isArray(day.item_details)) {
+          day.item_details = [];
+        }
+        if (!Array.isArray(day.meal_details)) {
+          day.meal_details = [];
+        }
+    
+        const updatedDay = {
+          id: day.id,
+          date: day.date,
+          items: day.item_details.map(item => item.id),
+          meals: day.meal_details.map(meal => meal.id)
+        };
+    
+        updateDay(day.id, { date: day.date, item_ids: updatedDay.items })
+          .then((updatedDayFromServer) => {
+            console.log("Day updated:", updatedDayFromServer);
+          })
+          .catch((error) => {
+            console.error("Error updating day:", error);
+          });
+      };
+    
+      if (!day) {
         return null;
-    }
+      }
 
     return (
         <div className={styles.dayDetailContainer}>
-            <h3>Details for {new Date(props.day.date).toLocaleDateString("pl-PL", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}</h3>
+            <h3>
+              Szczegóły dnia:{" "}
+              {new Date(day.date).toLocaleDateString("pl-PL", {
+                weekday: "long",
+                year: "numeric",
+                month: "long",
+                day: "numeric"
+              })}
+            </h3>
 
             {/* ITEMS SECTION */}
             <div className={styles.section}>
-                <h4>Items</h4>
+                <h4>Produkty</h4>
                 <ul className={styles.itemList}>
                     {tempItems.length > 0 ? (
                         tempItems.map((item) => (
@@ -82,24 +140,24 @@ export const DayDetail = (props:DayDetailProps ) => {
                             </li>
                         ))
                     ) : (
-                        <li>There are no items</li>
+                        <li>Brak produktów</li>
                     )}
                 </ul>
                 <img
                     src="http://localhost:8000/media/icons/circle-ellipsis.png"
-                    alt="Add item"
+                    alt="Dodaj produkt"
                     onClick={itemClick}
                 />
                 {showItemDropdown && (
                     <div className={styles.dropdown}>
-                        <p>Item list dropdown (to be implemented)</p>
+                         <ItemList assignedItems={tempItems} onItemSelect={addItemToDay} />
                     </div>
                 )}
             </div>
 
             {/* MEALS SECTION */}
             <div className={styles.section}>
-                <h4>Meals</h4>
+                <h4>Posiłki</h4>
                 <ul className={styles.itemList}>
                     {tempMeals.length > 0 ? (
                         tempMeals.map((meal) => (
