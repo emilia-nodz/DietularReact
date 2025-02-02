@@ -1,16 +1,25 @@
 import React from "react";
-const ItemDetails = () => {
+import { ItemData } from "../../Services/ItemService";
+
+
+interface ItemDetailsProps {
+    item: ItemData;
+}
+
+const ItemDetails: React.FC<ItemDetailsProps> = ({item}) => {
     return (
         <>
-            <p>Weight: </p>
-            <p>Calories: </p>
-            <p>Carbohydrates:</p>
-            <p >Proteins: </p>
-            <p >Fats:</p>
-            <p >Allergens:</p>
-            <ol>
-                <li>allergen</li>
-            </ol>
+            <p>Weight: {item.weight}</p>
+            <p>Calories: {item.calories} </p>
+            <p>Carbohydrates: {item.carbohydrates}</p>
+            <p >Proteins: {item.proteins} </p>
+            <p >Fats: {item.fats} </p>
+            <p >Allergens: </p>
+            <ul>
+        {item.allergen_details.map((allergen) => (
+          <li key={allergen.id}>{allergen.name}</li>
+        ))}
+      </ul>
         </>
     );
 

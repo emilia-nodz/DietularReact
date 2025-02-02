@@ -3,9 +3,10 @@ import "../../Styles/List.css"
 import { deleteItem, getItems, ItemData} from "../../Services/ItemService";
 import { NavLink } from 'react-router-dom';
 import { LightButton, RedButton } from '../Button';
-
+import ItemDetails from './ItemDetails';
 const ItemList = () => {
   const [items, setItems] = useState<ItemData[]>([]); 
+  const [DetailsVisibility, setDetailsVisibility] = useState<number>(-1);
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -35,6 +36,22 @@ const ItemList = () => {
     }
   };
 
+
+
+  const AimDetails = (itemID: number): void => {
+    if(itemID != DetailsVisibility)
+    {
+      setDetailsVisibility(itemID);
+    }
+    else 
+    {
+      setDetailsVisibility(-1);
+    }
+
+  };
+  
+
+
   return (
     <>
       <div className="main-container">
@@ -44,7 +61,10 @@ const ItemList = () => {
           <div className="list-container">
             {items.map((item) => (
               <li key = {item.id} className="list-item-container">
-                <p className="name">{item.name}</p>
+                <p onClick={() => AimDetails(item.id)} className="name">{item.name}</p>
+
+                {DetailsVisibility === item.id && <ItemDetails item={item}/>}
+
                 <NavLink to={`/editItem/${item.id}`}>
                   <LightButton label={'Edit'} />
                 </NavLink>
@@ -52,7 +72,11 @@ const ItemList = () => {
               </li>
             ))}
           </div>
+        
         </ul>
+   
+     
+
       </div>
     </>
   )};
