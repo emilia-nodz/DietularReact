@@ -40,7 +40,8 @@ class DaySerializer(serializers.ModelSerializer):
     items = serializers.PrimaryKeyRelatedField(
         many=True,
         queryset=Item.objects.all(),
-        write_only=True
+        write_only=True,
+        required=False
     )
 
     item_details = ItemSerializer(
@@ -51,7 +52,8 @@ class DaySerializer(serializers.ModelSerializer):
     meals = serializers.PrimaryKeyRelatedField(
         many=True,
         queryset=Meal.objects.all(),
-        write_only=True
+        write_only=True,
+        required=False
     )
 
     meal_details = MealSerializer(
