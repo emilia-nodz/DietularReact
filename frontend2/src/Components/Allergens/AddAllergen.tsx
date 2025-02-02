@@ -49,7 +49,7 @@ const AddAllergen = () => {
     const handleCombinedChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         handleInputChange(event);
         validateData(event);
-      };
+    };
    
     return (
         <>

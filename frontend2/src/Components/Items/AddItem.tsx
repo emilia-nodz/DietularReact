@@ -3,6 +3,7 @@ import "../../Styles/Form.css";
 import { ItemData, addItem } from "../../Services/ItemService";
 import { LightButton } from "../Button";
 import { getAllAllergens, AllergenData} from "../../Services/AllergenService";
+import Error from "../Error";
 
 const AddItem = () => {
   const [NewItemName, setItemName] = useState<string>('');
@@ -16,6 +17,9 @@ const AddItem = () => {
   const [items, setItems] = useState<ItemData[]>([]);
   const [isFormNotValid, setIsFormNotValid] = useState(true);
   const [allergens, setAllergens] = useState<AllergenData[]>([]); 
+
+  const[nameContainsOnlyLetters, updatenameContainsOnlyLetters] = useState(false);
+  
 
   useEffect(() => {
     const fetchAllergens = async () => {
@@ -31,8 +35,6 @@ const AddItem = () => {
     fetchAllergens();
   }, []);
 
-
-
   const handleAllergenChange = (id: number) => {
     if (selectedAllergens.includes(id)) {
       console.log( "Selsected all: " + id);
@@ -43,7 +45,6 @@ const AddItem = () => {
     }
   };
       
-
   const handlePost = async (e: React.FormEvent) => {
     e.preventDefault();
     if (NewItemName.length > 0) {
@@ -88,6 +89,26 @@ const AddItem = () => {
     setter(isNaN(value) ? 0 : value); 
   };
 
+  const validateData = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const data = event.target.value;
+    const letters = /^[A-Za-z]+$/;
+
+    if (data.length >= 1) {
+        if (data.match(letters)) {
+            updatenameContainsOnlyLetters(true);  
+            setIsFormNotValid(false);  
+        } else {
+            updatenameContainsOnlyLetters(false); 
+            setIsFormNotValid(true); 
+        }
+    }
+  }
+
+  const handleCombinedChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    handleInputChange(event);
+    validateData(event);
+  };
+
   return (
     <>
       <div className="main-container">
@@ -99,8 +120,9 @@ const AddItem = () => {
               <input
                 name="NewItemNameInput"
                 value={NewItemName}
-                onChange={handleInputChange}
+                onChange={handleCombinedChange}
               />
+              <Error status={nameContainsOnlyLetters} info="Name must consist of only letters"/>
             </div>
             <div className="form-thing">
               <label>Description</label>

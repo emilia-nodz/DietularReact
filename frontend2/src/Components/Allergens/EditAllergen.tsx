@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom";
 import { AllergenData, getAllergenById, updateAllergen } from "../../Services/AllergenService";
 import "../../Styles/Form.css";
 import { LightButton, RedButton } from "../Button";
+import Error from "../Error";
+
 
 
 const EditAllergen = () => {
@@ -12,6 +14,8 @@ const EditAllergen = () => {
     const [allergens, setAllergens] = useState<AllergenData[]>([]); 
     const [isFormNotValid, setIsFormNotValid] = useState(true);
     const [OldAllergenName, setOldAllergenName] = useState<string>(''); 
+
+    const[nameContainsOnlyLetters, updatenameContainsOnlyLetters] = useState(false);
     
 
     useEffect(() => {
@@ -65,6 +69,26 @@ const EditAllergen = () => {
         console.log("Cancel button clicked");
     };
 
+    const validateData = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const data = event.target.value;
+        const letters = /^[A-Za-z]+$/;
+
+        if (data.length >= 1) {
+            if (data.match(letters)) {
+                updatenameContainsOnlyLetters(true);  
+                setIsFormNotValid(false);  
+            } else {
+                updatenameContainsOnlyLetters(false); 
+                setIsFormNotValid(true); 
+            }
+        }
+    }
+
+    const handleCombinedChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        handleInputChange(event);
+        validateData(event);
+    };
+
     return (
         <>
         <div className="main-container">
@@ -76,8 +100,9 @@ const EditAllergen = () => {
                 <input 
                     name="name" 
                     value={NewAllergenName} 
-                    onChange={handleInputChange} 
+                    onChange={handleCombinedChange} 
                 />
+                <Error status={nameContainsOnlyLetters} info="Name must consist of only letters"/>
                 </div>
                 <div className="form-thing">
                     <LightButton

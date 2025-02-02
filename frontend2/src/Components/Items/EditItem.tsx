@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { AllergenData, getAllAllergens } from "../../Services/AllergenService";
 import { getItemById, updateItem } from "../../Services/ItemService";
 import { LightButton, RedButton } from "../Button";
+import Error from "../Error";
 
 const EditItem = () => {
     const { id } = useParams<{ id: string }>();
@@ -23,6 +24,8 @@ const EditItem = () => {
 
     const [allergens, setAllergens] = useState<AllergenData[]>([]);
     const [isFormNotValid, setIsFormNotValid] = useState(true);
+    const[nameContainsOnlyLetters, updatenameContainsOnlyLetters] = useState(false);
+  
 
     useEffect(() => {
         const fetchItem = async () => {
@@ -103,6 +106,26 @@ const EditItem = () => {
         }
     };
 
+    const validateData = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const data = event.target.value;
+        const letters = /^[A-Za-z]+$/;
+    
+        if (data.length >= 1) {
+            if (data.match(letters)) {
+                updatenameContainsOnlyLetters(true);  
+                setIsFormNotValid(false);  
+            } else {
+                updatenameContainsOnlyLetters(false); 
+                setIsFormNotValid(true); 
+            }
+        }
+      }
+
+    const handleCombinedChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        handleInputChange(event);
+        validateData(event);
+    };
+
     return (
         <div className="main-container">
         <h1>Edit Item</h1>
@@ -113,8 +136,9 @@ const EditItem = () => {
                 <input 
                 name="name" 
                 value={newItemData.name} 
-                onChange={handleInputChange} 
+                onChange={handleCombinedChange} 
                 />
+                <Error status={nameContainsOnlyLetters} info="Name must consist of only letters"/>              
             </div>
             <div className="form-thing">
                 <label>Description</label>
@@ -170,13 +194,13 @@ const EditItem = () => {
                     {allergens.map(allergen => (
                         <div key={allergen.id}>
                             <label>
-                                <input
-                                    type="checkbox"
-                                    value={allergen.id}
-                                    checked={newItemData.allergens.includes(allergen.id)}
-                                    onChange={handleAllergenChange}
-                                />
-                                {allergen.name}
+                            <input
+                                type="checkbox"
+                                value={allergen.id}
+                                checked={newItemData.allergens.includes(allergen.id)}
+                                onChange={handleAllergenChange}
+                            />
+                            {allergen.name}
                             </label>
                         </div>
                     ))}
@@ -184,7 +208,7 @@ const EditItem = () => {
             </div>
 
             <div className="form-thing">
-                <LightButton label="Confirm" />
+                <LightButton label="Confirm" disabled={isFormNotValid} />
                 <RedButton label="Cancel" onClick={handleCancel} />
             </div>
             </form>

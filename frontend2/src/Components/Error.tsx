@@ -7,7 +7,7 @@ const Error = (props: { status: any; info: string }) => {
             <p style={{ color: "#FF7F7F", fontWeight: "bold" }}>
                 {props.info}
             </p>
-        )}  
+    )}  
 	   </div>
 	);
 };

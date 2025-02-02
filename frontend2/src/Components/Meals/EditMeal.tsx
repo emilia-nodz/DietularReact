@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { getItems, ItemData } from "../../Services/ItemService";
 import { getMealById, updateMeal,  } from "../../Services/MealService";
 import { LightButton, RedButton } from "../Button";
+import Error from "../Error";
 
 const EditMeal = () => {
     const { id } = useParams<{ id: string }>();
@@ -21,6 +22,7 @@ const EditMeal = () => {
 
     const [items, setItems] = useState<ItemData[]>([]);
     const [isFormNotValid, setIsFormNotValid] = useState(true);
+    const[nameContainsOnlyLetters, updatenameContainsOnlyLetters] = useState(false);
 
     useEffect(() => {
         const fetchMeal = async () => {
@@ -96,6 +98,26 @@ const EditMeal = () => {
         }
     };
 
+    const validateData = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const data = event.target.value;
+        const letters = /^[A-Za-z]+$/;
+    
+        if (data.length >= 1) {
+            if (data.match(letters)) {
+                updatenameContainsOnlyLetters(true);  
+                setIsFormNotValid(false);  
+            } else {
+                updatenameContainsOnlyLetters(false); 
+                setIsFormNotValid(true); 
+            }
+        }
+      }
+
+    const handleCombinedChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        handleInputChange(event);
+        validateData(event);
+    };
+
     return (
         <div className="main-container">
         <h1>Edit Meal</h1>
@@ -106,8 +128,9 @@ const EditMeal = () => {
                 <input 
                 name="name" 
                 value={newMealData.name} 
-                onChange={handleInputChange} 
+                onChange={handleCombinedChange} 
                 />
+                <Error status={nameContainsOnlyLetters} info="Name must consist of only letters"/>   
             </div>
             <div className="form-thing">
                 <label>Description</label>
@@ -160,7 +183,7 @@ const EditMeal = () => {
                 </div>
             </div>
             <div className="form-thing">
-                <LightButton label="Confirm" />
+                <LightButton label="Confirm" disabled={isFormNotValid}/>
                 <RedButton label="Cancel" onClick={handleCancel} />
             </div>
             </form>

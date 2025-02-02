@@ -3,6 +3,7 @@ import "../../Styles/Form.css";
 import { MealData, addMeal } from "../../Services/MealService";
 import { LightButton } from "../Button";
 import { getItems, ItemData} from "../../Services/ItemService";
+import Error from "../Error";
 
 const AddMeal = () => {
   const [NewMealName, setMealName] = useState<string>('');
@@ -15,6 +16,7 @@ const AddMeal = () => {
   const [isFormNotValid, setIsFormNotValid] = useState(true);
   const [items, setItems] = useState<ItemData[]>([]); 
   const [selectedItems, setSelectedItems] = useState<number[]>([]);
+  const[nameContainsOnlyLetters, updatenameContainsOnlyLetters] = useState(false);
 
        useEffect(() => {
            const fetchItems = async () => {
@@ -74,7 +76,25 @@ const AddMeal = () => {
     }
   };
 
+  const validateData = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const data = event.target.value;
+    const letters = /^[A-Za-z]+$/;
 
+    if (data.length >= 1) {
+        if (data.match(letters)) {
+            updatenameContainsOnlyLetters(true);  
+            setIsFormNotValid(false);  
+        } else {
+            updatenameContainsOnlyLetters(false); 
+            setIsFormNotValid(true); 
+        }
+    }
+  }
+
+  const handleCombinedChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      handleInputChange(event);
+      validateData(event);
+  };
 
   return (
     <>
@@ -87,8 +107,9 @@ const AddMeal = () => {
               <input
                 name="NewMealNameInput"
                 value={NewMealName}
-                onChange={handleInputChange}
+                onChange={handleCombinedChange}
               />
+              <Error status={nameContainsOnlyLetters} info="Name must consist of only letters"/>
             </div>
 
             <div className="form-thing">
