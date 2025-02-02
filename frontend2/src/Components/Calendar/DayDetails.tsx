@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styles from "./DayDetail.module.css";
 import { updateDay, NewDayData } from "../../Services/DayService";
 import ItemList from "./ItemList";
+import MealList from "./MealList";
 
 interface Item {
     id: number;
@@ -21,6 +22,7 @@ interface Day {
 
 interface DayDetailProps {
     day: Day | null;
+    onDayUpdated: () => void;
 }
 
 export const DayDetail = (props:DayDetailProps ) => {
@@ -56,24 +58,21 @@ export const DayDetail = (props:DayDetailProps ) => {
         });
     };
 
-      const addMealToDay = (meal: Meal): void => {
-        if (day) {
-          let updatedMeals = day.meal_details ? [...day.meal_details] : [];
-          updatedMeals.push(meal);
-          day.meal_details = updatedMeals;
-          setTempMeals(updatedMeals);
-          console.log("Meal added to day:", meal);
-        }
+    const addMealToDay = (meal: Meal): void => {
+        setTempMeals((prevMeals) => {
+          const updatedMeals = [...prevMeals, meal];
+          console.log("Zaktualizowane tempMeals:", updatedMeals);
+          return updatedMeals;
+        });
       };
 
-      const removeMealFromDay = (meal: Meal): void => {
-        if (day && day.meal_details) {
-          const updatedMeals = day.meal_details.filter(m => m.id !== meal.id);
-          day.meal_details = updatedMeals;
-          setTempMeals(updatedMeals);
-          console.log("Meal removed from day:", meal);
-        }
-      }
+    const removeMealFromDay = (meal: Meal): void => {
+      setTempMeals((prevMeals) => {
+        const updatedMeals = prevMeals.filter((m) => m.id !== meal.id);
+        console.log("Zaktualizowane tempMeals po usunięciu:", updatedMeals);
+        return updatedMeals;
+      });
+    };
 
       const saveDay = (): void => {
         if (!day) {
@@ -83,8 +82,8 @@ export const DayDetail = (props:DayDetailProps ) => {
     
         const updatedDayPayload: NewDayData = {
             date: day.date,
-            items: tempItems.map(item => item.id), // Zmienione "items" -> "item_ids"
-            meals: tempMeals.map(meal => meal.id) // Zmienione "meals" -> "meal_ids"
+            items: tempItems.map(item => item.id),
+            meals: tempMeals.map(meal => meal.id) 
         };
 
         console.log("Dane wysyłane do backendu:", updatedDayPayload);
@@ -102,6 +101,7 @@ export const DayDetail = (props:DayDetailProps ) => {
       if (!day) {
         return null;
       }
+      
 
     return (
         <div className={styles.dayDetailContainer}>
@@ -169,12 +169,12 @@ export const DayDetail = (props:DayDetailProps ) => {
                 </ul>
                 <img
                     src="http://localhost:8000/media/icons/circle-ellipsis.png"
-                    alt="Add meal"
+                    alt="Dodaj posiłek"
                     onClick={mealClick}
                 />
                 {showMealDropdown && (
                     <div className={styles.dropdown}>
-                        <p>Meal list dropdown (to be implemented)</p>
+                        <MealList assignedMeals={tempMeals} onMealSelect={addMealToDay} />
                     </div>
                 )}
             </div>

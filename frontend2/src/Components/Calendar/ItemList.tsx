@@ -34,7 +34,7 @@ export const ItemList = (props: ItemListProps) => {
 
   return (
     <div>
-      <h4>Dostępne Produkty</h4>
+      <h4>Dostępne Produkty:</h4>
       <ul>
         {filteredItems.map((item) => (
           <li key={item.id} onClick={() => onItemSelect(item)} className={styles.itemEntry}>
