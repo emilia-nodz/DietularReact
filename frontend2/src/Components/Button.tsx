@@ -5,6 +5,7 @@ import "../Styles/Button.css"
 interface LightButtonProps {
     label: string;
     disabled?: boolean;
+    onClick?: (e: any) => void;
 }
 
 interface RedButtonProps {
@@ -20,6 +21,7 @@ export const LightButton = (props:LightButtonProps) => {
             style={{
                 cursor: props.disabled ? 'not-allowed' : 'pointer',
             }}
+            onClick={props.onClick}
         >
             {props.label}
         </button>

@@ -25,7 +25,8 @@ function App() {
         <Route path="/addMeal" element={<AddMeal />} />
         <Route path="/calendar" element={<Calendar />} />
 
-        <Route path="/editAllergen/:id" element={<EditAllergen/>} />
+        <Route path="/editAllergen/:id" element={<EditAllergen />}
+        />
         <Route path="/editItem/:id" element={<EditItem/>} />
 
       </Routes>
