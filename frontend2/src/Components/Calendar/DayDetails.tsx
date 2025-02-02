@@ -1,6 +1,18 @@
 import React, { useState, useEffect } from "react";
 import styles from "./DayDetail.module.css";
+import { updateDay, NewDayData } from "../../Services/DayService";
+import ItemList from "./ItemList";
+import MealList from "./MealList";
 
+interface Item {
+    id: number;
+    name: string;
+  }
+  
+  interface Meal {
+    id: number;
+    name: string;
+  }
 interface Day {
     id: number;
     date: string;
@@ -10,64 +22,102 @@ interface Day {
 
 interface DayDetailProps {
     day: Day | null;
+    onDayUpdated: () => void;
 }
 
 export const DayDetail = (props:DayDetailProps ) => {
+    const { day } = props;
     const [showItemDropdown, setShowItemDropdown] = useState(false);
     const [showMealDropdown, setShowMealDropdown] = useState(false);
     const [tempItems, setTempItems] = useState<{ id: number; name: string }[]>([]);
     const [tempMeals, setTempMeals] = useState<{ id: number; name: string }[]>([]);
 
     useEffect(() => {
-        if (props.day) {
-            setTempItems(props.day.item_details || []);
-            setTempMeals(props.day.meal_details || []);
+        if (day) {
+            setTempItems(day.item_details || []);
+            setTempMeals(day.meal_details || []);
         }
-    }, [props.day]);
+    }, [day]);
 
     const itemClick = () => setShowItemDropdown(!showItemDropdown);
     const mealClick = () => setShowMealDropdown(!showMealDropdown);
 
-    const addItemToDay = (item: { id: number; name: string }) => {
-        setTempItems((prev) => [...prev, item]);
-    };
-
-    const removeItemFromDay = (item: { id: number; name: string }) => {
-        setTempItems((prev) => prev.filter((i) => i.id !== item.id));
-    };
-
-    const addMealToDay = (meal: { id: number; name: string }) => {
-        setTempMeals((prev) => [...prev, meal]);
-    };
-
-    const removeMealFromDay = (meal: { id: number; name: string }) => {
-        setTempMeals((prev) => prev.filter((m) => m.id !== meal.id));
-    };
-
-    const saveDay = () => {
-        if (!props.day) {
-            console.warn("No day to save");
-            return;
-        }
-        console.log("Saving day:", {
-            id: props.day.id,
-            date: props.day.date,
-            items: tempItems,
-            meals: tempMeals,
+    const addItemToDay = (item: Item): void => {
+        setTempItems(prevItems => {
+            const updatedItems = [...prevItems, item];
+            console.log("Zaktualizowane tempItems:", updatedItems);
+            return updatedItems;
         });
     };
 
-    if (!props.day) {
+    const removeItemFromDay = (item: Item): void => {
+        setTempItems(prevItems => {
+            const updatedItems = prevItems.filter(i => i.id !== item.id);
+            console.log("Zaktualizowane tempItems po usunięciu:", updatedItems);
+            return updatedItems;
+        });
+    };
+
+    const addMealToDay = (meal: Meal): void => {
+        setTempMeals((prevMeals) => {
+          const updatedMeals = [...prevMeals, meal];
+          console.log("Zaktualizowane tempMeals:", updatedMeals);
+          return updatedMeals;
+        });
+      };
+
+    const removeMealFromDay = (meal: Meal): void => {
+      setTempMeals((prevMeals) => {
+        const updatedMeals = prevMeals.filter((m) => m.id !== meal.id);
+        console.log("Zaktualizowane tempMeals po usunięciu:", updatedMeals);
+        return updatedMeals;
+      });
+    };
+
+      const saveDay = (): void => {
+        if (!day) {
+          console.warn("No day to save");
+          return;
+        }
+    
+        const updatedDayPayload: NewDayData = {
+            date: day.date,
+            items: tempItems.map(item => item.id),
+            meals: tempMeals.map(meal => meal.id) 
+        };
+
+        console.log("Dane wysyłane do backendu:", updatedDayPayload);
+    
+        updateDay(day.id, updatedDayPayload)
+        .then((updatedDayPayload) => {
+            console.log("Day updated:", updatedDayPayload);
+        })
+        .catch((error) => {
+            console.error("Error updating day:", error);
+        });
+
+      };
+    
+      if (!day) {
         return null;
-    }
+      }
+      
 
     return (
         <div className={styles.dayDetailContainer}>
-            <h3>Details for {new Date(props.day.date).toLocaleDateString("pl-PL", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}</h3>
+            <h3>
+              Szczegóły dnia:{" "}
+              {new Date(day.date).toLocaleDateString("pl-PL", {
+                weekday: "long",
+                year: "numeric",
+                month: "long",
+                day: "numeric"
+              })}
+            </h3>
 
             {/* ITEMS SECTION */}
             <div className={styles.section}>
-                <h4>Items</h4>
+                <h4>Produkty</h4>
                 <ul className={styles.itemList}>
                     {tempItems.length > 0 ? (
                         tempItems.map((item) => (
@@ -82,24 +132,24 @@ export const DayDetail = (props:DayDetailProps ) => {
                             </li>
                         ))
                     ) : (
-                        <li>There are no items</li>
+                        <li>Brak produktów</li>
                     )}
                 </ul>
                 <img
                     src="http://localhost:8000/media/icons/circle-ellipsis.png"
-                    alt="Add item"
+                    alt="Dodaj produkt"
                     onClick={itemClick}
                 />
                 {showItemDropdown && (
                     <div className={styles.dropdown}>
-                        <p>Item list dropdown (to be implemented)</p>
+                         <ItemList assignedItems={tempItems} onItemSelect={addItemToDay} />
                     </div>
                 )}
             </div>
 
             {/* MEALS SECTION */}
             <div className={styles.section}>
-                <h4>Meals</h4>
+                <h4>Posiłki</h4>
                 <ul className={styles.itemList}>
                     {tempMeals.length > 0 ? (
                         tempMeals.map((meal) => (
@@ -119,12 +169,12 @@ export const DayDetail = (props:DayDetailProps ) => {
                 </ul>
                 <img
                     src="http://localhost:8000/media/icons/circle-ellipsis.png"
-                    alt="Add meal"
+                    alt="Dodaj posiłek"
                     onClick={mealClick}
                 />
                 {showMealDropdown && (
                     <div className={styles.dropdown}>
-                        <p>Meal list dropdown (to be implemented)</p>
+                        <MealList assignedMeals={tempMeals} onMealSelect={addMealToDay} />
                     </div>
                 )}
             </div>
