@@ -3,9 +3,10 @@ import "../../Styles/List.css"
 import { deleteMeal, getMeals, MealData} from "../../Services/MealService";
 import { LightButton, RedButton } from '../Button';
 import { NavLink } from 'react-router-dom';
-
+import MealDetails from './MealDetails';
 const MealList = () => {
   const [meals, setMeals] = useState<MealData[]>([]); 
+  const [DetailsVisibility, setDetailsVisibility] = useState<number>(-1);
 
   useEffect(() => {
     const fetchMeals = async () => {
@@ -35,6 +36,19 @@ const MealList = () => {
     }
   };
 
+
+  const AimDetails = (mealID: number): void => {
+    if(mealID != DetailsVisibility)
+    {
+      setDetailsVisibility(mealID);
+    }
+    else 
+    {
+      setDetailsVisibility(-1);
+    }
+
+  };
+
   return (
     <>
       <div className="main-container">
@@ -44,7 +58,11 @@ const MealList = () => {
           <div className="list-container">
             {meals.map((meal) => (
               <li key = {meal.id} className="list-item-container">
-                  <p className="name">{meal.name}</p>
+                  <p className="name"      onClick={() => AimDetails(meal.id)}      >{meal.name}</p>
+
+                  {DetailsVisibility === meal.id && <MealDetails meal={meal}/>}
+
+
                   <NavLink to={`/editMeal/${meal.id}`}>
                     <LightButton label={'Edit'} />
                   </NavLink>
