@@ -62,4 +62,12 @@ export const updateMeal = async (id: number, mealData: NewMealData): Promise<Mea
     }
 };
 
-
+export const getMealById = async (id: number): Promise<MealData> => {
+    try {
+      const response = await AxiosInstance.get(`meal/${id}/`);
+      return response.data;
+    } catch (error) {
+      console.error(`Error fetching meal with id ${id}:`, error);
+      throw error;
+    }
+};

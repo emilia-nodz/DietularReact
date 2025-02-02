@@ -10,6 +10,7 @@ import AddMeal from '../Components/Meals/AddMeal';
 import EditAllergen from '../Components/Allergens/EditAllergen';
 import EditItem from '../Components/Items/EditItem';
 import Calendar from '../Components/Calendar/Calendar';
+import EditMeal from '../Components/Meals/EditMeal';
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
         <Route path="/editAllergen/:id" element={<EditAllergen />}
         />
         <Route path="/editItem/:id" element={<EditItem/>} />
+        <Route path="/editMeal/:id" element={<EditMeal/>} />
 
       </Routes>
     </>

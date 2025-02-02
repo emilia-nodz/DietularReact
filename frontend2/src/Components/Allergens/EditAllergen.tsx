@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom"; 
 import { AllergenData, getAllergenById, updateAllergen } from "../../Services/AllergenService";
-
 import "../../Styles/Form.css";
 import { LightButton, RedButton } from "../Button";
 
 
 const EditAllergen = () => {
     const { id } = useParams<{ id: string }>(); 
+    
     const [NewAllergenName, setAllergenName] = useState<string>('');
     const [allergens, setAllergens] = useState<AllergenData[]>([]); 
     const [isFormNotValid, setIsFormNotValid] = useState(true);
