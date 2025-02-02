@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './Calendar.module.css';
 import DayDetail from './DayDetails';
+import { getDayById, addDay } from '../../Services/DayService';
 
 interface SelectedDay{
     year: number;
@@ -8,9 +9,17 @@ interface SelectedDay{
     day: number;
 }
 
+interface Day{
+    id: number;
+    date: string;
+    item_details: any;
+    meal_details: any;
+}
+
 export const Calendar = () => {
     const [currentDate, setCurrentDate] = useState(new Date());
     const [selectedDay, setSelectedDay] = useState<SelectedDay | null>(null);
+    const [dayDetailData, setDayDetailData] = useState<Day | null>(null);
 
     const getDaysInMonth = (year: number, month: number) => {
         return new Date(year, month + 1, 0).getDate();
@@ -44,7 +53,67 @@ export const Calendar = () => {
             setSelectedDay(newDay);
         }
     };
+
+    const refreshDay = (dayId: number) => {
+        
+        getDayById(dayId).then((data) => {
+            const transformedData: Day = {
+                id: data.id,
+                date: data.date,
+                item_details: data.item_details ?? [],
+                meal_details: data.meal_details ?? []
+              }
+            setDayDetailData(transformedData)
+        })
+        
+    };
     
+    useEffect(() => {
+        if (selectedDay) {
+          const dayId = new Date(selectedDay.year, selectedDay.month, selectedDay.day).getTime();
+          const dateStr = `${selectedDay.year}-${String(selectedDay.month + 1).padStart(2, '0')}-${String(selectedDay.day).padStart(2, '0')}`;
+    
+          getDayById(dayId)
+            .then((data) => {
+              const transformedData: Day = {
+                id: data.id,
+                date: data.date,
+                item_details: data.item_details ?? [],
+                meal_details: data.meal_details ?? []
+              }
+              console.log("Dane pobrane z backendu:", data);
+              console.log("Dane pobrane z backendu po transformacji:", transformedData);
+              setDayDetailData(transformedData);
+            })
+            .catch((error) => {
+            if (error.response?.status === 404) {
+                console.log("Dzień nie istnieje – tworzymy nowy wpis.");
+            }
+              const newDayPayload = {
+                id: dayId,
+                date: dateStr, 
+                items: [],
+                meals: []
+              };
+
+              addDay(newDayPayload)
+                .then((data) => {
+                    const transformedData: Day = {
+                        id: data.id,
+                        date: data.date,
+                        item_details: data.item_details ?? [],
+                        meal_details: data.meal_details ?? []
+                      }
+                      setDayDetailData(transformedData);
+                })
+                .catch((err) => {
+                  console.error("Błąd tworzenia dnia:", err);
+                });
+            });
+        } else {
+          setDayDetailData(null);
+        }
+      }, [selectedDay]);
 
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
@@ -88,14 +157,9 @@ export const Calendar = () => {
                     );
                 })}
             </div>
-            {selectedDay !== null && (
+            {dayDetailData  !== null && (
                 <div className="day-container">
-                    <DayDetail day={{ 
-                        id: new Date(selectedDay.year, selectedDay.month, selectedDay.day).getTime(),
-                        date: `${selectedDay.year}-${String(selectedDay.month + 1).padStart(2, '0')}-${String(selectedDay.day).padStart(2, '0')}`,
-                        item_details: null,
-                        meal_details: null
-                    }} />
+                    <DayDetail day={dayDetailData} onDayUpdated={() => refreshDay(dayDetailData.id)} />
                 </div>
             )}
 
