@@ -33,10 +33,10 @@
     padding: 10px;
 }
 
-.main-container .label {
+.main-container .form-container label {
     padding: 5px;
     color:#4B3629;
-    font-weight: bold;
+    font-weight: bold ;
     display: flex;
     justify-content: center;
     align-items: center; 
