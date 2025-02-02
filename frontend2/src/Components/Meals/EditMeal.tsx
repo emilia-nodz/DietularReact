@@ -22,7 +22,13 @@ const EditMeal = () => {
 
     const [items, setItems] = useState<ItemData[]>([]);
     const [isFormNotValid, setIsFormNotValid] = useState(true);
-    const[nameContainsOnlyLetters, updatenameContainsOnlyLetters] = useState(false);
+    const[nameContainsOnlyLetters, updatenameContainsOnlyLetters] = useState(true);
+
+    const [numberGreaterThanZero, updateNumberGreaterThanZero] = useState({
+        numberOfPortions: true,
+        portionWeight: true,
+        caloriesPerPortion: true,
+    });
 
     useEffect(() => {
         const fetchMeal = async () => {
@@ -104,18 +110,37 @@ const EditMeal = () => {
     
         if (data.length >= 1) {
             if (data.match(letters)) {
-                updatenameContainsOnlyLetters(true);  
+                updatenameContainsOnlyLetters(false);  
                 setIsFormNotValid(false);  
             } else {
-                updatenameContainsOnlyLetters(false); 
+                updatenameContainsOnlyLetters(true); 
                 setIsFormNotValid(true); 
             }
         }
-      }
+    }
+
+    const validateNumber = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = event.target;
+        const numValue = Number(value);
+    
+        updateNumberGreaterThanZero(prev => {
+            const updatedGreaterThanZero = { ...prev, [name]: numValue > 0 };
+            
+            const allValid = Object.values(updatedGreaterThanZero).every(Boolean);
+            setIsFormNotValid(!allValid);
+    
+            return updatedGreaterThanZero;
+        });
+    };
 
     const handleCombinedChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         handleInputChange(event);
         validateData(event);
+    };
+
+    const handleNumbersChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        handleInputChange(event);
+        validateNumber(event);
     };
 
     return (
@@ -130,7 +155,7 @@ const EditMeal = () => {
                 value={newMealData.name} 
                 onChange={handleCombinedChange} 
                 />
-                <Error status={nameContainsOnlyLetters} info="Name must consist of only letters"/>   
+                <Error status={!nameContainsOnlyLetters} info="Name must consist of only letters"/>   
             </div>
             <div className="form-thing">
                 <label>Description</label>
@@ -145,24 +170,27 @@ const EditMeal = () => {
                 <input 
                 name="numberOfPortions" 
                 value={newMealData.numberOfPortions} 
-                onChange={handleInputChange} 
+                onChange={handleNumbersChange} 
                 />
+                <Error status={numberGreaterThanZero.numberOfPortions} info="Number must be greater than zero"/>  
             </div>
             <div className="form-thing">
                 <label>Portion weight</label>
                 <input 
                 name="portionWeight" 
                 value={newMealData.portionWeight} 
-                onChange={handleInputChange} 
+                onChange={handleNumbersChange} 
                 />
+                <Error status={numberGreaterThanZero.portionWeight} info="Weight must be greater than zero"/>  
             </div>
             <div className="form-thing">
                 <label>Calories per portion</label>
                 <input 
                 name="caloriesPerPortion" 
                 value={newMealData.caloriesPerPortion} 
-                onChange={handleInputChange} 
+                onChange={handleNumbersChange} 
                 />
+                <Error status={numberGreaterThanZero.caloriesPerPortion} info="Calories must be greater than zero"/>  
             </div>
             <div className="form-thing">
                 <label>Items</label>
@@ -184,6 +212,7 @@ const EditMeal = () => {
             </div>
             <div className="form-thing">
                 <LightButton label="Confirm" disabled={isFormNotValid}/>
+                <br></br>
                 <RedButton label="Cancel" onClick={handleCancel} />
             </div>
             </form>

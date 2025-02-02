@@ -24,7 +24,14 @@ const EditItem = () => {
 
     const [allergens, setAllergens] = useState<AllergenData[]>([]);
     const [isFormNotValid, setIsFormNotValid] = useState(true);
-    const[nameContainsOnlyLetters, updatenameContainsOnlyLetters] = useState(false);
+    const[nameContainsOnlyLetters, updateNameContainsOnlyLetters] = useState(false);
+    const [numberGreaterThanZero, updateNumberGreaterThanZero] = useState({
+        weight: true,
+        calories: true,
+        carbohydrates: true,
+        proteins: true,
+        fats: true,
+    });
   
 
     useEffect(() => {
@@ -112,20 +119,39 @@ const EditItem = () => {
     
         if (data.length >= 1) {
             if (data.match(letters)) {
-                updatenameContainsOnlyLetters(true);  
+                updateNameContainsOnlyLetters(true);  
                 setIsFormNotValid(false);  
             } else {
-                updatenameContainsOnlyLetters(false); 
+                updateNameContainsOnlyLetters(false); 
                 setIsFormNotValid(true); 
             }
         }
-      }
+    }
+
+    const validateNumber = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = event.target;
+        const numValue = Number(value);
+    
+        updateNumberGreaterThanZero(prev => {
+            const updatedGreaterThanZero = { ...prev, [name]: numValue > 0 };
+            
+            const allValid = Object.values(updatedGreaterThanZero).every(Boolean);
+            setIsFormNotValid(!allValid);
+    
+            return updatedGreaterThanZero;
+        });
+    };
 
     const handleCombinedChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         handleInputChange(event);
         validateData(event);
     };
 
+    const handleNumbersChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        handleInputChange(event);
+        validateNumber(event);
+    };
+    
     return (
         <div className="main-container">
         <h1>Edit Item</h1>
@@ -153,40 +179,45 @@ const EditItem = () => {
                 <input 
                 name="weight" 
                 value={newItemData.weight} 
-                onChange={handleInputChange} 
+                onChange={handleNumbersChange} 
                 />
+                <Error status={numberGreaterThanZero.weight} info="Weight must be greater than zero"/>  
             </div>
             <div className="form-thing">
                 <label>Calories</label>
                 <input 
                 name="calories" 
                 value={newItemData.calories} 
-                onChange={handleInputChange} 
+                onChange={handleNumbersChange} 
                 />
+                <Error status={numberGreaterThanZero.calories} info="Calories must be greater than zero"/>  
             </div>
             <div className="form-thing">
                 <label>Carbohydrates</label>
                 <input 
                 name="carbohydrates" 
                 value={newItemData.carbohydrates} 
-                onChange={handleInputChange} 
+                onChange={handleNumbersChange} 
                 />
+                <Error status={numberGreaterThanZero.carbohydrates} info="Carbs must be greater than zero"/>  
             </div>
             <div className="form-thing">
                 <label>Proteins</label>
                 <input 
                 name="proteins" 
                 value={newItemData.proteins} 
-                onChange={handleInputChange} 
+                onChange={handleNumbersChange} 
                 />
+                <Error status={numberGreaterThanZero.proteins} info="Proteins must be greater than zero"/> 
             </div>
             <div className="form-thing">
                 <label>Fats</label>
                 <input 
                 name="fats" 
                 value={newItemData.fats} 
-                onChange={handleInputChange} 
+                onChange={handleNumbersChange} 
                 />
+                <Error status={numberGreaterThanZero.fats} info="Fats must be greater than zero"/> 
             </div>
             <div className="form-thing">
                 <label>Allergens</label>
@@ -209,6 +240,7 @@ const EditItem = () => {
 
             <div className="form-thing">
                 <LightButton label="Confirm" disabled={isFormNotValid} />
+                <br></br>
                 <RedButton label="Cancel" onClick={handleCancel} />
             </div>
             </form>

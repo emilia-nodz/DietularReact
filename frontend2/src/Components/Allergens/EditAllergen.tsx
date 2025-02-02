@@ -109,6 +109,7 @@ const EditAllergen = () => {
                         label="Confirm"
                         disabled={isFormNotValid}
                     />
+                    <br></br>
                     <RedButton
                         label="Cancel"
                         onClick={(e) => handleCancel(e)}
