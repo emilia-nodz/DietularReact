@@ -16,7 +16,7 @@ const EditAllergen = () => {
     const [OldAllergenName, setOldAllergenName] = useState<string>(''); 
 
     const[nameContainsOnlyLetters, updatenameContainsOnlyLetters] = useState(false);
-    
+    const [nameTouched, setNameTouched] = useState(false);
 
     useEffect(() => {
         const fetchAllergen = async () => {
@@ -41,25 +41,21 @@ const EditAllergen = () => {
                 const updatedAllergen = await updateAllergen(Number(id), { name: NewAllergenName });
 
                 setAllergens(prevAllergens =>
-                prevAllergens.map(allergen =>
-                    allergen.id === updatedAllergen.id ? updatedAllergen : allergen
-                )
+                    prevAllergens.map(allergen =>
+                        allergen.id === updatedAllergen.id ? updatedAllergen : allergen
+                    )
                 );
 
                 setAllergenName('');
-                setIsFormNotValid(true);
                 console.log("Allergen updated successfully!");
             } catch (error) {
                 console.error("Error updating allergen:", error);
             }
-        } else {
-        console.log("Please provide a valid allergen name.");
         }
     };
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setAllergenName(event.target.value);
-        setIsFormNotValid(event.target.value.trim().length === 0);
     };
 
     const handleCancel = (e: React.MouseEvent) => {
@@ -85,6 +81,9 @@ const EditAllergen = () => {
     }
 
     const handleCombinedChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (!nameTouched){
+            setNameTouched(true);
+        }
         handleInputChange(event);
         validateData(event);
     };
@@ -102,7 +101,7 @@ const EditAllergen = () => {
                     value={NewAllergenName} 
                     onChange={handleCombinedChange} 
                 />
-                <Error status={nameContainsOnlyLetters} info="Name must consist of only letters"/>
+                <Error status={nameContainsOnlyLetters || !nameTouched} info="Name must consist of only letters"/>
                 </div>
                 <div className="form-thing">
                     <LightButton

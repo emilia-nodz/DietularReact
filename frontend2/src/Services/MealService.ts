@@ -1,7 +1,6 @@
 import AxiosInstance from "./Axios";
 import { ItemData} from "../Services/ItemService";
 
-
 export interface MealData {
     id: number,
     name: string,
