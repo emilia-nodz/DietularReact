@@ -74,7 +74,7 @@ const EditAllergen = () => {
                 <div className="form-thing">
                 <label>Name</label>
                 <input 
-                    name="NewAllergenNameInput" 
+                    name="name" 
                     value={NewAllergenName} 
                     onChange={handleInputChange} 
                 />

@@ -70,10 +70,18 @@ const EditItem = () => {
         }));
     };
 
-    const handleAllergenChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        const selectedOptions = Array.from(e.target.selectedOptions, option => Number(option.value));
-        setNewItemData(prev => ({ ...prev, allergens: selectedOptions }));
+    const handleAllergenChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { value, checked } = e.target;
+        const allergenId = Number(value); 
+    
+        setNewItemData(prev => ({
+            ...prev,
+            allergens: checked
+                ? [...prev.allergens, allergenId] 
+                : prev.allergens.filter(id => id !== allergenId) 
+        }));
     };
+    
 
     const handleCancel = (e: React.MouseEvent) => {
         e.preventDefault();
@@ -158,14 +166,23 @@ const EditItem = () => {
             </div>
             <div className="form-thing">
                 <label>Allergens</label>
-                <select multiple value={newItemData.allergens.map(String)} onChange={handleAllergenChange}>
-                {allergens.map(allergen => (
-                    <option key={allergen.id} value={allergen.id}>
-                    {allergen.name}
-                    </option>
-                ))}
-                </select>
+                <div>
+                    {allergens.map(allergen => (
+                        <div key={allergen.id}>
+                            <label>
+                                <input
+                                    type="checkbox"
+                                    value={allergen.id}
+                                    checked={newItemData.allergens.includes(allergen.id)}
+                                    onChange={handleAllergenChange}
+                                />
+                                {allergen.name}
+                            </label>
+                        </div>
+                    ))}
+                </div>
             </div>
+
             <div className="form-thing">
                 <LightButton label="Confirm" />
                 <RedButton label="Cancel" onClick={handleCancel} />

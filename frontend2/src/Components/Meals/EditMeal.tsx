@@ -64,9 +64,16 @@ const EditMeal = () => {
         }));
     };
 
-    const handleItemChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        const selectedOptions = Array.from(e.target.selectedOptions, option => Number(option.value));
-        setNewMealData(prev => ({ ...prev, items: selectedOptions }));
+    const handleItemChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { value, checked } = e.target;
+        const itemId = Number(value); 
+    
+        setNewMealData(prev => ({
+            ...prev,
+            items: checked
+                ? [...prev.items, itemId] 
+                : prev.items.filter(id => id !== itemId) 
+        }));
     };
 
     const handleCancel = (e: React.MouseEvent) => {
@@ -136,13 +143,21 @@ const EditMeal = () => {
             </div>
             <div className="form-thing">
                 <label>Items</label>
-                <select multiple value={newMealData.items.map(String)} onChange={handleItemChange}>
-                {items.map(item => (
-                    <option key={item.id} value={item.id}>
-                    {item.name}
-                    </option>
-                ))}
-                </select>
+                <div>
+                    {items.map(item => (
+                        <div key={item.id}>
+                            <label>
+                                <input
+                                    type="checkbox"
+                                    value={item.id}
+                                    checked={newMealData.items.includes(item.id)}
+                                    onChange={handleItemChange}
+                                />
+                                {item.name}
+                            </label>
+                        </div>
+                    ))}
+                </div>
             </div>
             <div className="form-thing">
                 <LightButton label="Confirm" />
