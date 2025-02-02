@@ -18,8 +18,7 @@ const AddItem = () => {
   const [isFormNotValid, setIsFormNotValid] = useState(true);
   const [allergens, setAllergens] = useState<AllergenData[]>([]); 
 
-  const[nameContainsOnlyLetters, updatenameContainsOnlyLetters] = useState(false);
-  
+  const[nameContainsOnlyLetters, updatenameContainsOnlyLetters] = useState(false);  
 
   useEffect(() => {
     const fetchAllergens = async () => {
