@@ -34,7 +34,6 @@ const AllergenList = () => {
             console.error('Error deleting allergen:', error);
         }
     };
-
       
     return (
         <div className="main-container">
@@ -56,5 +55,4 @@ const AllergenList = () => {
         </div>
     );
 };
-
 export default AllergenList;

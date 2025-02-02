@@ -41,25 +41,21 @@ const EditAllergen = () => {
                 const updatedAllergen = await updateAllergen(Number(id), { name: NewAllergenName });
 
                 setAllergens(prevAllergens =>
-                prevAllergens.map(allergen =>
-                    allergen.id === updatedAllergen.id ? updatedAllergen : allergen
-                )
+                    prevAllergens.map(allergen =>
+                        allergen.id === updatedAllergen.id ? updatedAllergen : allergen
+                    )
                 );
 
                 setAllergenName('');
-                setIsFormNotValid(true);
                 console.log("Allergen updated successfully!");
             } catch (error) {
                 console.error("Error updating allergen:", error);
             }
-        } else {
-        console.log("Please provide a valid allergen name.");
         }
     };
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setAllergenName(event.target.value);
-        setIsFormNotValid(event.target.value.trim().length === 0);
     };
 
     const handleCancel = (e: React.MouseEvent) => {

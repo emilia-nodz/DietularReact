@@ -34,7 +34,6 @@ const EditItem = () => {
         fats: true,
     });
   
-
     useEffect(() => {
         const fetchItem = async () => {
         try {
@@ -103,15 +102,13 @@ const EditItem = () => {
 
     const handlePost = async () => {
         if (newItemData.name.trim()) {
-        try {
-            await updateItem(Number(id), newItemData);
-            console.log("Item updated successfully!");
-        } catch (error) {
-            console.error("Error updating item:", error);
-        }
-        } else {
-        console.log("Please provide a valid item name.");
-        }
+            try {
+                await updateItem(Number(id), newItemData);
+                console.log("Item updated successfully!");
+            } catch (error) {
+                console.error("Error updating item:", error);
+            }
+        } 
     };
 
     const validateData = (event: React.ChangeEvent<HTMLInputElement>) => {
