@@ -21,7 +21,7 @@ const MealList = () => {
     fetchMeals();
   }, []);
 
-  const HandleDelete = async (id: number) => {
+  const handleDelete = async (id: number) => {
     try {
         await deleteMeal(id);
     
@@ -48,7 +48,7 @@ const MealList = () => {
                   <NavLink to={`/editMeal/${meal.id}`}>
                     <LightButton label={'Edit'} />
                   </NavLink>
-                    <RedButton label={'Delete'} onClick={() => HandleDelete(meal.id)}/>
+                    <RedButton label={'Delete'} onClick={() => handleDelete(meal.id)}/>
               </li>
             ))}
           </div>

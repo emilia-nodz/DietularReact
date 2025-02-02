@@ -31,7 +31,7 @@ const AddMeal = () => {
          }, []);
     
 
-  const HandlePost = async (e: React.FormEvent) => {
+  const handlePost = async (e: React.FormEvent) => {
     e.preventDefault();
     if (NewMealName.length > 0) {
         try {
@@ -54,7 +54,7 @@ const AddMeal = () => {
     }
   };
 
-  const HandleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setMealName(event.target.value);
     setIsFormNotValid(event.target.value.trim().length === 0);
   };
@@ -81,13 +81,13 @@ const AddMeal = () => {
       <div className="main-container">
         <h1>Add meal</h1>
         <div className="form-container">
-          <form onSubmit={HandlePost}>
+          <form onSubmit={handlePost}>
             <div className="form-thing">
               <label>Name</label>
               <input
                 name="NewMealNameInput"
                 value={NewMealName}
-                onChange={HandleInputChange}
+                onChange={handleInputChange}
               />
             </div>
 

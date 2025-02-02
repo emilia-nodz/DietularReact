@@ -65,7 +65,7 @@ const EditItem = () => {
     }, [id]); 
 
 
-    // const HandlePost = async () => {
+    // const handlePost = async () => {
     //     if (NewItemName.length > 0) {
     //         try {
     //             const updatedAllergen = await updateAllergen(Number(id), { name: NewAllergenName });

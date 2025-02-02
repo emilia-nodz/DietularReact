@@ -33,7 +33,7 @@ const AddItem = () => {
 
 
 
-  const HandleAllergenChange = (id: number) => {
+  const handleAllergenChange = (id: number) => {
     if (selectedAllergens.includes(id)) {
       console.log( "Selsected all: " + id);
       setSelectedAllergens(selectedAllergens.filter((allergenId) => allergenId !== id));
@@ -44,7 +44,7 @@ const AddItem = () => {
   };
       
 
-  const HandlePost = async (e: React.FormEvent) => {
+  const handlePost = async (e: React.FormEvent) => {
     e.preventDefault();
     if (NewItemName.length > 0) {
         try {
@@ -78,12 +78,12 @@ const AddItem = () => {
     }
   };
 
-  const HandleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setItemName(event.target.value);
     setIsFormNotValid(event.target.value.trim().length === 0);
   };
 
-  const HandleNumberChange = (setter: React.Dispatch<React.SetStateAction<number>>) => (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleNumberChange = (setter: React.Dispatch<React.SetStateAction<number>>) => (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseFloat(event.target.value);
     setter(isNaN(value) ? 0 : value); 
   };
@@ -93,13 +93,13 @@ const AddItem = () => {
       <div className="main-container">
         <h1>Add item</h1>
         <div className="form-container">
-          <form onSubmit={HandlePost}>
+          <form onSubmit={handlePost}>
             <div className="form-thing">
               <label>Name</label>
               <input
                 name="NewItemNameInput"
                 value={NewItemName}
-                onChange={HandleInputChange}
+                onChange={handleInputChange}
               />
             </div>
             <div className="form-thing">
@@ -115,7 +115,7 @@ const AddItem = () => {
               <input
                 name="NewItemWeightInput"
                 value={NewItemWeight}
-              onChange={HandleNumberChange(setItemWeight)}
+              onChange={handleNumberChange(setItemWeight)}
                 type="number"
               />
             </div>
@@ -124,7 +124,7 @@ const AddItem = () => {
               <input
                 name="NewItemCaloriesInput"
                 value={NewItemCalories}
-                onChange={HandleNumberChange(setItemCalories)}
+                onChange={handleNumberChange(setItemCalories)}
                 type="number"
               />
             </div>
@@ -133,7 +133,7 @@ const AddItem = () => {
               <input
                 name="NewItemCarbohydratesInput"
                 value={NewItemCarbohydrates}
-                onChange={HandleNumberChange(setItemCarbohydrates)}
+                onChange={handleNumberChange(setItemCarbohydrates)}
                 type="number"
               />
             </div>
@@ -142,7 +142,7 @@ const AddItem = () => {
               <input
                 name="NewItemProteinsInput"
                 value={NewItemProteins}
-                onChange={HandleNumberChange(setItemProteins)}
+                onChange={handleNumberChange(setItemProteins)}
                 type="number"
               />
             </div>
@@ -151,7 +151,7 @@ const AddItem = () => {
               <input
                 name="NewItemFatsInput"
                 value={NewItemFats}
-                 onChange={HandleNumberChange(setItemFats)}
+                 onChange={handleNumberChange(setItemFats)}
                 type="number"
               />
             </div>
@@ -166,7 +166,7 @@ const AddItem = () => {
                       <input
                         type="checkbox"
                         checked={selectedAllergens.includes(allergen.id)}
-                        onChange={() => HandleAllergenChange(allergen.id)}
+                        onChange={() => handleAllergenChange(allergen.id)}
                       />
                       {allergen.name}
                     </label>

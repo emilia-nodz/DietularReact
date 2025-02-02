@@ -8,7 +8,7 @@ const AddAllergen = () => {
     const [allergens, setAllergens] = useState<AllergenData[]>([]); 
     const [isFormNotValid, setIsFormNotValid] = useState(true);
 
-    const HandlePost = async () => {
+    const handlePost = async () => {
         if(NewAllergenName.length>0) {
             try {
                 const newAllergen = await addAllergen({name: NewAllergenName})
@@ -23,7 +23,7 @@ const AddAllergen = () => {
         }
     };
  
-    const HandleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setAllergenName(event.target.value);
         setIsFormNotValid(event.target.value.trim().length === 0);
     }
@@ -34,13 +34,13 @@ const AddAllergen = () => {
             <div className="main-container">
                 <h1>Add allergen</h1>
                 <div className="form-container">
-                    <form onSubmit={HandlePost}>
+                    <form onSubmit={handlePost}>
                     <div className="form-thing">
                         <label>Name</label>
                         <input 
                             name="NewAllergenNameInput" 
                             value={NewAllergenName} 
-                            onChange={HandleInputChange} 
+                            onChange={handleInputChange} 
                         />
                     </div>
                     <div className="form-thing">

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { NavLink, useParams } from "react-router-dom"; 
+import { useParams } from "react-router-dom"; 
 import { AllergenData, getAllergenById, updateAllergen } from "../../Services/AllergenService";
 
 import "../../Styles/Form.css";
@@ -32,7 +32,7 @@ const EditAllergen = () => {
         }
     }, [id]); 
 
-    const HandlePost = async () => {
+    const handlePost = async () => {
         if (NewAllergenName.length > 0) {
             try {
                 const updatedAllergen = await updateAllergen(Number(id), { name: NewAllergenName });
@@ -54,12 +54,12 @@ const EditAllergen = () => {
         }
     };
 
-    const HandleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setAllergenName(event.target.value);
         setIsFormNotValid(event.target.value.trim().length === 0);
     };
 
-    const HandleCancel = (e: React.MouseEvent) => {
+    const handleCancel = (e: React.MouseEvent) => {
         e.preventDefault();
         setAllergenName(OldAllergenName); 
         setIsFormNotValid(true); 
@@ -71,13 +71,13 @@ const EditAllergen = () => {
         <div className="main-container">
             <h1>Edit allergen</h1>
             <div className="form-container">
-            <form onSubmit={(e) => { e.preventDefault(); HandlePost(); }}>
+            <form onSubmit={(e) => { e.preventDefault(); handlePost(); }}>
                 <div className="form-thing">
                 <label>Name</label>
                 <input 
                     name="NewAllergenNameInput" 
                     value={NewAllergenName} 
-                    onChange={HandleInputChange} 
+                    onChange={handleInputChange} 
                 />
                 </div>
                 <div className="form-thing">
@@ -87,7 +87,7 @@ const EditAllergen = () => {
                     />
                     <RedButton
                         label="Cancel"
-                        onClick={(e) => HandleCancel(e)}
+                        onClick={(e) => handleCancel(e)}
                     />
                 </div>
             </form>
