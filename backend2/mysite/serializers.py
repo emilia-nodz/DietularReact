@@ -67,7 +67,11 @@ class DaySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def update(self, instance, validated_data):
+<<<<<<< HEAD
+        # Sprawdzamy, czy items i meals są podane, jeśli nie, pozostają niezmienione
+=======
         # Sprawdzamy, czy items i meals s� podane, je�li nie, pozostaj� niezmienione
+>>>>>>> 86c327b7b46b4489375ea3470314850d8e69d384
         items = validated_data.pop('items', None)
         meals = validated_data.pop('meals', None)
 
@@ -76,9 +80,15 @@ class DaySerializer(serializers.ModelSerializer):
 
         # Aktualizujemy ManyToMany
         if items is not None:
+<<<<<<< HEAD
+            instance.items.set(items)  # <- Upewniamy się, że items są dodane do dnia
+        if meals is not None:
+            instance.meals.set(meals)  # <- Upewniamy się, że meals są dodane do dnia
+=======
             instance.items.set(items)  # <- Upewniamy si�, �e items s� dodane do dnia
         if meals is not None:
             instance.meals.set(meals)  # <- Upewniamy si�, �e meals s� dodane do dnia
+>>>>>>> 86c327b7b46b4489375ea3470314850d8e69d384
 
         instance.save()
         return instance
