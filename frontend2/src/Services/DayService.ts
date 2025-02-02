@@ -2,17 +2,32 @@ import AxiosInstance from "./Axios";
 import { ItemData } from "./ItemService";
 
 // Definicja struktury danych dnia
-export interface DayData {
-  id: number;
-  date: string;
-  items: ItemData[];
+export interface Item {
+    id: number;
+    name: string;
 }
+
+export interface Meal {
+    id: number;
+    name: string;
+}
+
+export interface DayData {
+    id: number;
+    date: string;
+    items: number[]; // ID produktów
+    meals: number[]; // ID posiłków
+    item_details?: Item[]; // Szczegóły produktów
+    meal_details?: Meal[]; // Szczegóły posiłków
+}
+
 
 // Dane potrzebne przy tworzeniu lub aktualizacji dnia.
 // Opcjonalnie można przekazać początkową listę itemów (np. jako tablicę id itemów).
 export interface NewDayData {
   date: string;
-  item_ids?: number[];
+  items?: number[];
+  meals?: number[];
 }
 
 // Pobranie listy dni
