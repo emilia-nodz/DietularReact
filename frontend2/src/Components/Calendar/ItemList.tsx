@@ -16,6 +16,7 @@ export const ItemList = (props: ItemListProps) => {
   const { assignedItems, onItemSelect } = props;
   const [items, setItems] = useState<Item[]>([]);
   const [filteredItems, setFilteredItems] = useState<Item[]>([]);
+  
 
   useEffect(() => {
     getItems()

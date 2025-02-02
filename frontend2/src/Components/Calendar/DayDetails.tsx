@@ -85,8 +85,6 @@ export const DayDetail = (props:DayDetailProps ) => {
             items: tempItems.map(item => item.id),
             meals: tempMeals.map(meal => meal.id) 
         };
-
-        console.log("Dane wysyłane do backendu:", updatedDayPayload);
     
         updateDay(day.id, updatedDayPayload)
         .then((updatedDayPayload) => {

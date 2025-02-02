@@ -1,7 +1,5 @@
 import AxiosInstance from "./Axios";
-import { ItemData } from "./ItemService";
 
-// Definicja struktury danych dnia
 export interface Item {
     id: number;
     name: string;
@@ -15,22 +13,18 @@ export interface Meal {
 export interface DayData {
     id: number;
     date: string;
-    items: number[]; // ID produktów
-    meals: number[]; // ID posiłków
-    item_details?: Item[]; // Szczegóły produktów
-    meal_details?: Meal[]; // Szczegóły posiłków
+    items: number[];
+    meals: number[];
+    item_details?: Item[];
+    meal_details?: Meal[];
 }
 
-
-// Dane potrzebne przy tworzeniu lub aktualizacji dnia.
-// Opcjonalnie można przekazać początkową listę itemów (np. jako tablicę id itemów).
 export interface NewDayData {
   date: string;
   items?: number[];
   meals?: number[];
 }
 
-// Pobranie listy dni
 export const getDays = async (): Promise<DayData[]> => {
   try {
     const response = await AxiosInstance.get('day/');
@@ -41,7 +35,6 @@ export const getDays = async (): Promise<DayData[]> => {
   }
 };
 
-// Dodanie nowego dnia
 export const addDay = async (dayData: NewDayData): Promise<DayData> => {
   try {
     const response = await AxiosInstance.post('day/', dayData);
@@ -52,7 +45,6 @@ export const addDay = async (dayData: NewDayData): Promise<DayData> => {
   }
 };
 
-// Usunięcie dnia
 export const deleteDay = async (id: number): Promise<void> => {
   try {
     await AxiosInstance.delete(`day/${id}/`);
@@ -63,7 +55,6 @@ export const deleteDay = async (id: number): Promise<void> => {
   }
 };
 
-// Aktualizacja danych dnia
 export const updateDay = async (id: number, dayData: NewDayData): Promise<DayData> => {
   try {
     const response = await AxiosInstance.patch(`day/${id}/`, dayData);
@@ -74,7 +65,6 @@ export const updateDay = async (id: number, dayData: NewDayData): Promise<DayDat
   }
 };
 
-// Pobranie szczegółowych informacji o konkretnym dniu
 export const getDayById = async (id: number): Promise<DayData> => {
   try {
     const response = await AxiosInstance.get(`day/${id}/`);
@@ -88,10 +78,8 @@ export const getDayById = async (id: number): Promise<DayData> => {
     }}
 };
 
-// Przypisanie itemu do konkretnego dnia
 export const addItemToDay = async (dayId: number, itemId: number): Promise<DayData> => {
   try {
-    // Zakładamy, że endpoint przyjmujący dodanie itemu do dnia to 'day/{dayId}/items/'
     const response = await AxiosInstance.post(`day/${dayId}/items/`, { itemId });
     return response.data;
   } catch (error) {

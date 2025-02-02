@@ -81,8 +81,6 @@ export const Calendar = () => {
                 item_details: data.item_details ?? [],
                 meal_details: data.meal_details ?? []
               }
-              console.log("Dane pobrane z backendu:", data);
-              console.log("Dane pobrane z backendu po transformacji:", transformedData);
               setDayDetailData(transformedData);
             })
             .catch((error) => {
