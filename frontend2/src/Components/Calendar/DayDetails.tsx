@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styles from "./DayDetail.module.css";
-import { updateDay } from "../../Services/DayService";
+import { updateDay, NewDayData } from "../../Services/DayService";
 import ItemList from "./ItemList";
 
 interface Item {
@@ -41,23 +41,20 @@ export const DayDetail = (props:DayDetailProps ) => {
     const mealClick = () => setShowMealDropdown(!showMealDropdown);
 
     const addItemToDay = (item: Item): void => {
-        if (day) {
-          let updatedItems = day.item_details ? [...day.item_details] : [];
-          updatedItems.push(item);
-          day.item_details = updatedItems;
-          setTempItems(updatedItems);
-          console.log("Item added to day:", item);
-        }
-      };
+        setTempItems(prevItems => {
+            const updatedItems = [...prevItems, item];
+            console.log("Zaktualizowane tempItems:", updatedItems);
+            return updatedItems;
+        });
+    };
 
-      const removeItemFromDay = (item: Item): void => {
-        if (day && day.item_details) {
-          const updatedItems = day.item_details.filter(i => i.id !== item.id);
-          day.item_details = updatedItems;
-          setTempItems(updatedItems);
-          console.log("Item removed from day:", item);
-        }
-      };
+    const removeItemFromDay = (item: Item): void => {
+        setTempItems(prevItems => {
+            const updatedItems = prevItems.filter(i => i.id !== item.id);
+            console.log("Zaktualizowane tempItems po usunięciu:", updatedItems);
+            return updatedItems;
+        });
+    };
 
       const addMealToDay = (meal: Meal): void => {
         if (day) {
@@ -84,27 +81,22 @@ export const DayDetail = (props:DayDetailProps ) => {
           return;
         }
     
-        if (!Array.isArray(day.item_details)) {
-          day.item_details = [];
-        }
-        if (!Array.isArray(day.meal_details)) {
-          day.meal_details = [];
-        }
-    
-        const updatedDay = {
-          id: day.id,
-          date: day.date,
-          items: day.item_details.map(item => item.id),
-          meals: day.meal_details.map(meal => meal.id)
+        const updatedDayPayload: NewDayData = {
+            date: day.date,
+            items: tempItems.map(item => item.id), // Zmienione "items" -> "item_ids"
+            meals: tempMeals.map(meal => meal.id) // Zmienione "meals" -> "meal_ids"
         };
+
+        console.log("Dane wysyłane do backendu:", updatedDayPayload);
     
-        updateDay(day.id, { date: day.date, item_ids: updatedDay.items })
-          .then((updatedDayFromServer) => {
-            console.log("Day updated:", updatedDayFromServer);
-          })
-          .catch((error) => {
+        updateDay(day.id, updatedDayPayload)
+        .then((updatedDayPayload) => {
+            console.log("Day updated:", updatedDayPayload);
+        })
+        .catch((error) => {
             console.error("Error updating day:", error);
-          });
+        });
+
       };
     
       if (!day) {

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import styles from "./DayDetail.module.css";
 import { getItems } from '../../Services/ItemService';
 
 interface Item {
@@ -33,10 +34,13 @@ export const ItemList = (props: ItemListProps) => {
 
   return (
     <div>
-      <h4>Dostępne Itemy</h4>
+      <h4>Dostępne Produkty</h4>
       <ul>
         {filteredItems.map((item) => (
-          <li key={item.id} onClick={() => onItemSelect(item)}>
+          <li key={item.id} onClick={() => onItemSelect(item)} className={styles.itemEntry}>
+            <img src="http://localhost:8000/media/icons/diamond-plus.png"
+            alt={item.name}
+            className={styles.itemIcon} />
             {item.name}
           </li>
         ))}

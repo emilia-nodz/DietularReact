@@ -64,9 +64,11 @@ export const Calendar = () => {
               const transformedData: Day = {
                 id: data.id,
                 date: data.date,
-                item_details: data.items ? data.items : [],
+                item_details: data.item_details ? data.item_details : [],
                 meal_details: []
               }
+              console.log("Dane pobrane z backendu:", data);
+              console.log("Dane pobrane z backendu po transformacji:", transformedData);
               setDayDetailData(transformedData);
             })
             .catch((error) => {
